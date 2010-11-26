@@ -1,6 +1,6 @@
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access'); 
-$helper = JPATH_SITE.DS.'media'.DS.'plg_jbLibrary'.DS.'helpers'.DS.'image.php';
+$helper = JPATH_SITE.DS.'media'.DS.'plg_jblibrary'.DS.'helpers'.DS.'image.php';
 if (file_exists($helper)){ 
 	require_once($helper); 
 } else {

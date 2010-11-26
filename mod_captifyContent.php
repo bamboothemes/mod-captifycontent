@@ -18,7 +18,7 @@ defined('_JEXEC') or die('Restricted access');
 require_once (dirname(__FILE__).DS.'helper.php');
 
 $document =& JFactory::getDocument();
-$library = JURI::base(true).'/media/plg_jbLibrary/';
+$library = JURI::base(true).'/media/plg_jblibrary/';
 $modbase = JURI::base(true).'/modules/mod_captifyContent/';
 $module_id = $module->id;
 $url = JURI::base();
