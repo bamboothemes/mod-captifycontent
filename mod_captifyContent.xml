@@ -18,7 +18,7 @@
     <folder>includes</folder>
     <folder>js</folder>
   </files>
-  <params addpath="/modules/mod_captifyContent/includes/elements">
+  <params addpath="/modules/mod_captifyContent/elements">
     <param type="header" default="General Content Settings" />
     <param type="spacer" default="The following settings determine the source of the content that is to be displayed. In order for you to use the k2 options you need to have the K2 component installed on your site." />
     <param name="type" type="list" default="section" label="Content source" description="Select whether to display sections, categories, k2 or Joomla content items.">
@@ -34,6 +34,7 @@
       <option value="1">Yes</option>
       <option value="0">No</option>
     </param>
+    <param type="panel" panel="panelCategory" title="Category Display Settings"/>
     <param type="header" default="Category Display Options" />
     <param type="spacer" default="If you have selected the category option above you can filter the sections that are used to display category images in the folowing select list." />
     <param name="sectionid" type="sectionsmultiple" default="" label="Select Sections" description="PARAMSECTIONID" />
@@ -43,15 +44,16 @@
       <option value="random">Random</option>
       <option value="order">Default ordering</option>
     </param>
-    <param type="header" default="Joomla Content Display Settings" />
+    <param type="panel" panel="panelContent" title="Joomla Content Display Settings"/>
+    <param type="header" default="Joomla Content Display Options" />
     <param type="spacer" default="The following settings determine the Joomla categories that are available for the module to source content content from if Joomla content is slected above." />
-    <param name="article_source" type="list" default="cat" label="Article Source" description="Choose how you would like to specify the article sources">
+    <!--<param name="article_source" type="list" default="cat" label="Article Source" description="Choose how you would like to specify the article sources">
       <option value="cat">Categories</option>
       <option value="art">Articles</option>
       <option value="catart">Categories + Articles</option>
-    </param>
+    </param>-->
     <param name="catid" type="categories" default="" label="Category" description="Select the categories that you would like to display" />
-    <param name="artid" type="text" default="" label="Article IDs" description="List the article ID's separated by a comma ," />
+        <param name="artid" type="articles" default="" label="Articles" description="Select the articles you would like to display." />
     <param name="ordering" type="list" default="rdate" label="Ordering of content" description="Select the order in which the content items should appear.">
       <option value="rdate">Most Recent First</option>
       <option value="date">Oldest First</option>
@@ -66,20 +68,21 @@
       <option value="1">Yes</option>
       <option value="0">No</option>
     </param>
-    <param type="header" default="K2 Content Display Settings" />
+    <param type="panel" panel="panelK2" title="K2 Content Display Settings"/>
+    <param type="header" default="K2 Content Display Options" />
     <param type="spacer" default="The following settings determine the K2 categories that are available for the module to source content content from if K2 content is slected above." />
-    <param name="itemFilter" type="list" default="cat" label="K2 Items" description="Select the K2 Item Source.">
+    <!--<param name="itemFilter" type="list" default="cat" label="K2 Items" description="Select the K2 Item Source.">
       <option value="cat">Categories</option>
       <option value="feat">Featured Items</option>
       <option value="item">Items</option>
       <option value="catitem">Categories + Items</option>
-    </param>
+    </param>-->
     <param name="k2catid" type="categoriesmultiple" default="" label="Filter items by category" description="Select one ore more categories for which you want to filter an items list. Select none to fetch items from all categories." />
-    <param name="getChildren" type="radio" default="0" label="Fetch items from children categories">
+    <param name="getChildren" type="list" default="0" label="Fetch items from children categories">
       <option value="0">No</option>
       <option value="1">Yes</option>
     </param>
-    <param name="itemid" type="text" default="" label="Item IDs" description="List the K2 item ID's separated by a comma ," />
+    <param name="itemid" type="items" default="" label="K2 Items" description="Select the K2 items you would like to display." />
     <param name="orderingK2" type="list" default="order" label="Ordering" description="Ordering options">
       <option value="">Default</option>
       <option value="date">Oldest first</option>
@@ -91,6 +94,7 @@
       <option value="best">Highest rated</option>
       <option value="rand">Random ordering</option>
     </param>
+    <param type="panel" panel="panelImage" title="Image Display Settings"/>
     <param type="header" default="Image Resize Settings" />
     <param name="image_width" type="text" default="245" label="Width of the resized image" description="Set the width of the resized image." />
     <param name="image_height" type="text" default="100" label="Height of the resized image" description="Set the width of the resized image." />
