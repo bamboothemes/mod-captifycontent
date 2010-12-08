@@ -19,8 +19,7 @@
     <folder>js</folder>
   </files>
   <params addpath="/modules/mod_captifyContent/elements">
-    <param type="header" default="General Content Settings" />
-    <param type="spacer" default="The following settings determine the source of the content that is to be displayed. In order for you to use the k2 options you need to have the K2 component installed on your site." />
+
     <param name="type" type="list" default="section" label="Content source" description="Select whether to display sections, categories, k2 or Joomla content items.">
       <option value="content">Joomla Articles</option>
       <option value="k2">K2 Items</option>
@@ -34,9 +33,19 @@
       <option value="1">Yes</option>
       <option value="0">No</option>
     </param>
+ <param type="panel" panel="panelCategory" title="Captify Content Scripts"/>
+ <param type="info" default="The following options determine how the css and javascript/jquery files are referenced on your site. The option to load the scripts in the head of the template is ideal but will not work if Joomla cache is turned on. The option to load them in the website body is easy but is not xhtml compliant. The last option disables the scripts all together and is ideal if you are using more than one instance of the module on the page. If you select the last option then you need to make sure that the scripts are included at least once on the page in your template or via another module." />
+    <param name="loadCSS" type="list" default="head" label="Load CSS?" description="Set this option to yes if you would like the module to load its css styles. Set this option to no if you would like disable the modules css syles.">
+      <option value="head">Yes - Loads in the head but incompatible with Joomla cache.</option>
+      <option value="body">Yes - Load in the body but not xhtml valid</option>
+      <option value="no">Disable CSS</option>
+    </param>
+    <param name="loadJS" type="list" default="head" label="Load Scripts?" description="Set this option to yes if you would like the module to load its javascript files. Set this option to no if you would like disable the modules javascript files.">
+      <option value="head">Yes - Loads in the head but incompatible with Joomla cache.</option>
+      <option value="body">Yes - Load in the body but not xhtml valid</option>
+      <option value="no">Disable scripts</option>
+    </param>
     <param type="panel" panel="panelCategory" title="Category Display Settings"/>
-    <param type="header" default="Category Display Options" />
-    <param type="spacer" default="If you have selected the category option above you can filter the sections that are used to display category images in the folowing select list." />
     <param name="sectionid" type="sectionsmultiple" default="" label="Select Sections" description="PARAMSECTIONID" />
     <param name="secOrdering" type="list" default="order" label="Ordering of Sections" description="Select the order in which the section items to appear.">
       <option value="alpha">Title Alphabetical</option>
@@ -44,9 +53,8 @@
       <option value="random">Random</option>
       <option value="order">Default ordering</option>
     </param>
-    <param type="panel" panel="panelContent" title="Joomla Content Display Settings"/>
-    <param type="header" default="Joomla Content Display Options" />
-    <param type="spacer" default="The following settings determine the Joomla categories that are available for the module to source content content from if Joomla content is slected above." />
+    <param type="panel" panel="panelContent" title="Joomla Content Settings"/>
+   
     <!--<param name="article_source" type="list" default="cat" label="Article Source" description="Choose how you would like to specify the article sources">
       <option value="cat">Categories</option>
       <option value="art">Articles</option>
@@ -68,9 +76,8 @@
       <option value="1">Yes</option>
       <option value="0">No</option>
     </param>
-    <param type="panel" panel="panelK2" title="K2 Content Display Settings"/>
-    <param type="header" default="K2 Content Display Options" />
-    <param type="spacer" default="The following settings determine the K2 categories that are available for the module to source content content from if K2 content is slected above." />
+    <param type="panel" panel="panelK2" title="K2 Item Settings"/>
+    
     <!--<param name="itemFilter" type="list" default="cat" label="K2 Items" description="Select the K2 Item Source.">
       <option value="cat">Categories</option>
       <option value="feat">Featured Items</option>
@@ -94,8 +101,21 @@
       <option value="best">Highest rated</option>
       <option value="rand">Random ordering</option>
     </param>
-    <param type="panel" panel="panelImage" title="Image Display Settings"/>
-    <param type="header" default="Image Resize Settings" />
+    <param type="panel" panel="panel" title="K2 Image source"/>
+ <param name="displayImages" type="list" default="k2item" label="K2 Image source" description="Choose to use the K2 item image or the first image in the K2 content.">
+      <option value="k2content">From K2 IntroText</option>
+      <option value="k2item">K2 Item Image</option>
+    </param>
+    <param name="itemImageSize" type="list" default="Original" label="K2 Item Image size">
+      <option value="Original">Original</option>
+      <option value="XSmall">XSmall</option>
+      <option value="Small">Small</option>
+      <option value="Medium">Medium</option>
+      <option value="Large">Large</option>
+      <option value="XLarge">XLarge</option>
+      <option value="Generic">Generic</option>
+    </param>
+    <param type="panel" panel="panelImage" title="Image resize settings"/>
     <param name="image_width" type="text" default="245" label="Width of the resized image" description="Set the width of the resized image." />
     <param name="image_height" type="text" default="100" label="Height of the resized image" description="Set the width of the resized image." />
     <param name="option" type="list" default="1" label="Resize Method" description="The method you would like to use when resizing images.">
@@ -109,24 +129,9 @@
       <option value="1">Yes</option>
       <option value="0">No</option>
     </param>
-    <param type="header" default="Thumbnail spacing" />
     <param name="rightMargin" type="text" default="0" label="Thumbnail right margin" description="Enter a px unit for the right margin of the images. Applied if equalising margins are disabled. " />
     <param name="bottomMargin" type="text" default="0" label="Thumbnail bottom margin" description="Enter a px unit for the bottom margin of the images." />
-    <param type="header" default="K2 Image Settings" />
-    <param name="displayImages" type="list" default="k2item" label="K2 Image source" description="Choose to use the K2 item image or the first image in the K2 content.">
-      <option value="k2content">From K2 IntroText</option>
-      <option value="k2item">K2 Item Image</option>
-    </param>
-    <param name="itemImageSize" type="list" default="Original" label="K2 Item Image size">
-      <option value="Original">Original</option>
-      <option value="XSmall">XSmall</option>
-      <option value="Small">Small</option>
-      <option value="Medium">Medium</option>
-      <option value="Large">Large</option>
-      <option value="XLarge">XLarge</option>
-      <option value="Generic">Generic</option>
-    </param>
-    <param type="header" default="Transition Settings" />
+ <param type="panel" panel="panelContent" title="Transition Settings"/>
     <param name="useCaptify" type="list" default="1" label="Enable the hover effect?" description="Set this option to yes if you want to display the transition effect when hovering over the item. By setting this option to no you can use the captify module as an image menu that directs the user to the content, categories or sections when clicked.">
       <option value="1">Yes - Image Overlay</option>
       <option value="2">Yes - Title Overlay</option>
@@ -152,25 +157,11 @@
     </param>
   </params>
   <params group="advanced">
-    <param type="header" default="General Module Settings" />
     <param name="cache" type="list" default="0" label="Caching" description="Select whether to cache the content of this module">
       <option value="1">Use global</option>
       <option value="0">No caching</option>
     </param>
     <param name="cache_time" type="text" default="900" label="Cache Time" description="The time before the module is recached" />
     <param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
-    <param type="spacer" default="" />
-    <param type="header" default="Scripts and CSS Files" />
-    <param type="spacer" default="The following options determine how the css and javascript/jquery files are referenced on your site. The option to load the scripts in the head of the template is ideal but will not work if Joomla cache is turned on. The option to load them in the website body is easy but is not xhtml compliant. The last option disables the scripts all together and is ideal if you are using more than one instance of the module on the page. If you select the last option then you need to make sure that the scripts are included at least once on the page in your template or via another module." />
-    <param name="loadCSS" type="list" default="head" label="Load CSS?" description="Set this option to yes if you would like the module to load its css styles. Set this option to no if you would like disable the modules css syles.">
-      <option value="head">Yes - Loads in the head but incompatible with Joomla cache.</option>
-      <option value="body">Yes - Load in the body but not xhtml valid</option>
-      <option value="no">Disable CSS</option>
-    </param>
-    <param name="loadJS" type="list" default="head" label="Load Scripts?" description="Set this option to yes if you would like the module to load its javascript files. Set this option to no if you would like disable the modules javascript files.">
-      <option value="head">Yes - Loads in the head but incompatible with Joomla cache.</option>
-      <option value="body">Yes - Load in the body but not xhtml valid</option>
-      <option value="no">Disable scripts</option>
-    </param>
   </params>
 </install>

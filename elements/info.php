@@ -8,12 +8,13 @@
 */
 // no direct access
 defined('_JEXEC') or die('Restricted access');
-class JElementHeader extends JElement {
-	var	$_name = 'header';
+class JElementInfo extends JElement {
+	var	$_name = 'info';
 	function fetchElement($name, $value, &$node, $control_name){
 		// Output
+
 		return '
-		<div style="font-weight:bold;padding:10px 0;margin:0;background:#f6f6f6;height:10px">
+		<div style="font-size:12px;line-height:18px;color:#333;padding:10px;margin:10px 0;background: #FAF2B6">
 			'.JText::_($value).'
 		</div>
 		';
