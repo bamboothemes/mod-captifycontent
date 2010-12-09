@@ -56,13 +56,18 @@ if($loadCSS== 'head') $document->addStyleSheet($modbase.'css/captifyContent.css'
 
 if (($useCaptify == '2')&&($loadJS == 'head')) { $document->addScript($modbase . "js/captify.tiny.js");}
 
-if($contentSource == "k2" or $contentSource == "k2category")
+$k2 = JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_k2'.DS.'admin.k2.php';
+if((($contentSource == "k2")||($contentSource == "k2category"))&&(file_exists($k2)))
 {
 	$list = modCCK2ContentHelper::getList($params);
 }
-else
+elseif($contentSource == "article")
 {
 	$list = modCaptifycontentHelper::getList($params);
+}
+else
+{
+	echo 'K2 is not installed';
 }
 
 if (!count($list)) {
