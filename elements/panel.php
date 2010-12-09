@@ -10,7 +10,7 @@
 defined('_JEXEC') or die('Restricted access');
 class JElementPanel extends JElement
 {
-	   var   $_name = 'Panel';
+	   var   $_name = 'panel';
 	   function fetchElement($name, $value, &$node, $control_name)
 	   {
 		   	//when our code starts the second td in a tr are open
