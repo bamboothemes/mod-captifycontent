@@ -122,7 +122,7 @@
     <param name="option" type="list" default="1" label="Resize Method" description="The method you would like to use when resizing images.">
       <option value="crop">Smart Crop</option>
       <option value="landscape">Landscape</option>
-      <option value="portrait">portrait</option>
+      <option value="Portrait">Portrait</option>
       <option value="auto">Auto Resize</option>
       <option value="exact">Exact</option>
     </param>
