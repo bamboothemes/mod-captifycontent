@@ -61,7 +61,7 @@ if((($contentSource == "k2")||($contentSource == "k2category"))&&(file_exists($k
 {
 	$list = modCCK2ContentHelper::getList($params);
 }
-elseif(($contentSource == "content") || ($contentSource == "section") || ($contentSource == "category"))
+elseif(($contentSource == "content")||($contentSource == "category")||($contentSource == "section"))
 {
 	$list = modCaptifycontentHelper::getList($params);
 }
