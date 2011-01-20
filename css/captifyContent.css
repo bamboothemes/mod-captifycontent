@@ -1,9 +1,3 @@
-/* @override 
-	http://localhost:8888/joomla/1.5/grid2/modules/mod_captifyContent/css/captifyContent.css
-	http://localhost:8888/dev/newstream/modules/mod_captifyContent/css/captifyContent.css
-	http://localhost:8888/svn/extensions/modules/mod_captifyContent/css/captifyContent.css
-*/
-
 /* @group Mod Captify Sections */
  /* --- viewport configuration ---------------------------------------------------------- */
         .viewport, .ccItem{float: left; overflow: hidden;position: relative;z-index: 1;}
