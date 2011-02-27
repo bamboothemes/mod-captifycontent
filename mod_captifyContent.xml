@@ -7,7 +7,7 @@
     <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
     <authorEmail>design@joomlabamboo.com</authorEmail>
     <authorUrl>www.joomlabamboo.com</authorUrl>
-    <version>1.4.5</version>
+    <version>1.4.6</version>
     <description>Captify Content displays the image assigned to your category or section and the title using the awesome captifyScript. If the section or category does not have an image assigned to it then it will not show. To assign an image to the section or category go to the section or category manager open the section/category and select an image from the drop down list. Please note the image must be located in the images/stories folder of joomla which is the default folder for the section and category images to be stored anyway. Please note that you need to have the JB Library plugin installed and published for this module to work as desired.</description>
     <files>
         <filename module="mod_captifyContent">mod_captifyContent.php</filename>
