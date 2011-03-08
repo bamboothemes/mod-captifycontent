@@ -1,3 +1,6 @@
+.viewport{
+position:relative;
+}
 .viewport,.ccItem {
 float:left;
 overflow:hidden;
@@ -18,6 +21,12 @@ text-align:center;
 text-decoration:none;
 width:100%;
 z-index:100;
+}
+
+.viewport a span.bottom {
+	bottom:0;
+	left:0;
+	height:65%;
 }
 
 .viewport a span em {
