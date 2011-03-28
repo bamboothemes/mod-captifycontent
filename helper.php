@@ -348,8 +348,6 @@ else if
 
 		$userId		= (int) $user->get('id');
 
-		$articleSource = $params->get('article_source','cat');
-
 		$count		= (int) $params->get('countcc', 5);
 
 		$catid		= $params->get('catid');
@@ -498,7 +496,7 @@ else if
 
 				$catCondition = ' AND (cc.id=' . implode( ' OR cc.id=', $catid ) . ')';
 
-				if($articleSource == 'catart'){
+				if($artid){
 
 					$catCondition = ' OR (cc.id=' . implode( ' OR cc.id=', $catid ) . ')';
 
@@ -516,7 +514,7 @@ else if
 
 				$catCondition = ' AND (cc.id=' . implode( ' OR cc.id=', $ids ) . ')';
 
-				if($articleSource == 'catart'){
+				if($artid){
 
 					$catCondition = ' OR (cc.id=' . implode( ' OR cc.id=', $ids ) . ')';
 
@@ -528,15 +526,15 @@ else if
 
 		
 
-		if($articleSource == 'cat'){
+		//if($articleSource == 'cat'){
 
-			$artCondition = '';
+		//	$artCondition = '';
 
-		}elseif ($articleSource == 'art'){
+		//}elseif ($articleSource == 'art'){
 
-			$catCondition = '';
+		//	$catCondition = '';
 
-		}
+		//}
 
 		
 
