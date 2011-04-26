@@ -199,12 +199,6 @@ abstract class modCaptifycontentHelper
 
 						$item->link = JRoute::_('index.php?option=com_users&view=login&Itemid='.$Itemid);
 						}
-
-					if ($renderPlugin == 'strip') {
-						$item->introtext = preg_replace('/{([a-zA-Z0-9\-_]*)\s*(.*?)}/i','', $item->introtext);
-					}else{
-						$item->introtext = JHtml::_('content.prepare', $item->introtext);
-					}
 			
 					$item->text = $item->introtext;
 				}
