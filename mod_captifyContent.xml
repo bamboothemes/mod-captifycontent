@@ -21,9 +21,9 @@
 	<config>    
 		<fields name="params" addfieldpath="/modules/mod_captifyContent/fields">
 			<fieldset name="general" group="general" label="General Settings">
-        		<field name="type" type="list" default="section" label="Content source" description="Select whether to display categories or Joomla content items.">
-		            <option value="content">Joomla Articles</option>
-		            <option value="category">Joomla Categories</option>
+        		<field name="type" type="list" default="section" label="Image Content source" description="Select whether to display categories or Joomla content items.">
+		            <option value="content">Joomla Article Images</option>
+		            <!--<option value="category">Joomla Category Images</option>-->
 		        </field>
 		        <field name="count" type="text" default="5" label="Item Count" description="The number of items to display (default is 5)" />
 		        <field name="imagesPerRow" type="text" default="3" label="Items Per Row" description="Set the number of images to be per row." />
@@ -45,23 +45,8 @@
 		            <option value="no">Disable scripts</option>
 		        </field>
 			</fieldset>
-        	<fieldset name="categorysettings" group="categoryettings" label="Captify Category Settings">
-        		
-			</fieldset>
-        	<fieldset name="articles" group="articles" label="Article Filtering Options">
-        		<field name="count" type="text" default="5" label="Count" description="The number of items to display (default 5). A value of 0 shows all selected articles" />
-				<field name="show_front" type="radio" default="show" label="Show Featured Articles" description="Choose to show, hide or show only featured articles">
-					<option value="show">Show</option>
-					<option value="hide">Hide</option>
-					<option value="only">Only</option>
-				</field>
-		        <!--    <field name="article_source" type="list" default="cat" label="Article Source" description="Choose how you would like to specify the article sources">
-		      <option value="cat">Categories</option>
-		      <option value="art">Articles</option>
-		      <option value="catart">Categories + Articles</option>
-		    </field>-->
-		<field name="filteringspacer11" type="spacer" hr="true" />
-			<field name="category_filtering_type" type="radio"
+        	<fieldset name="articles" group="articles" label="Content Filtering Options">
+				<field name="category_filtering_type" type="radio"
 				default="1"
 				label="Category Filtering Type"
 				description="Select Inclusive to Include the selcted categories or Exclusive to Exclude the selected categories"
@@ -78,6 +63,33 @@
 				</field>
 				<field name="levels" type="text" default="1" label="Category Depth" description="Specify the number of sub category levels to be included" />
 				<field name="filteringspacer12" type="spacer" hr="true" />
+				<field type="info" name="articleinfo" default="The following options are particularly relevant to using articles as a source of Captify images. Picking a value of Select all Articles will not filter any articles except by the category selctions above. If you have chosen to display images from categories then the following settings can be ignored." />
+				<field name="show_front" type="radio" default="show" label="Show Featured Articles" description="Choose to show, hide or show only featured articles">
+					<option value="show">Show</option>
+					<option value="hide">Hide</option>
+					<option value="only">Only</option>
+				</field>
+				<field name="article_filtering_type" type="radio"
+				default="1"
+				label="Article Filtering Type"
+				description="Select Inclusive to Include the selected articles or Exclusive to Exclude the selected articles">
+					<option value="1">Inclusive</option>
+					<option value="0">Exclusive</option>
+				</field>
+				<field name="artid" type="sql"
+					multiple="true" size="10"
+					label="Articles"
+					description="Select the articles to use for content filtering"
+					query="SELECT id, title FROM #__content ORDER BY title"
+					key_field="id" value_field="title">
+					<option value="">Select All Articles</option>
+				</field>
+		        <!--    <field name="article_source" type="list" default="cat" label="Article Source" description="Choose how you would like to specify the article sources">
+		      		<option value="cat">Categories</option>
+				      <option value="art">Articles</option>
+				      <option value="catart">Categories + Articles</option>
+				    </field>-->
+				<field name="filteringspacer11" type="spacer" hr="true" />
 				<field name="author_filtering_type" type="radio" default="1" label="Author Filtering Type" description="Select Inclusive to Include the selcted authors or Exclusive to Exclude the selected authors " >
 					<option value="1">Inclusive</option>
 					<option value="0">Exclusive</option>

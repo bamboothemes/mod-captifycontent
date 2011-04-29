@@ -37,79 +37,58 @@ abstract class modCaptifycontentHelper
 		$appParams = $app->getParams();
 		
 		if ($type == "category") {
-			$db		=& JFactory::getDBO();
-			$user		=& JFactory::getUser();
-			$ordering		= $params->get( 'ordering' , 'order' );
-			$count		= intval($params->get('count', 5)); 
-			$contentConfig 	= &JComponentHelper::getParams( 'com_content' );
-			$catid		= $params->get('catid');
-			$access		= !$contentConfig->get('shownoauth');
-			$gid 		= $user->get('aid', 0);
-			$now		= date('Y-m-d H:i:s', time() + $mainframe->getCfg('offset') * 60 * 60);
-			$nullDate	= $db->getNullDate();
+			$catids = $params->get('catid');
+			$access = !JComponentHelper::getParams('com_content')->get('show_noauth');
+			$authorised = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'));
+			$categories = JModel::getInstance('Categories', 'ContentModel', array('ignore_request' => true));
+			$categories->setState('params', $appParams);
+			$levels = $params->get('levels', 1) ? $params->get('levels', 1) : 9999;
+			$categories->setState('list.start', 0);
+			$categories->setState('list.limit', (int) $params->get('count', 5));
+			$categories->setState('filter.get_children', $levels);
+			$categories->setState('filter.published', 1);
+			$categories->setState('filter.access', $access);
+			$categories->setState('filter.parentId', $catids);
+			$categories->setState('category.id',$catids);
+			//$items = $categories->getItems(true);
 			
-			if ($catid)
+			foreach ( $items as $item )
 			{
-				if (is_array($catid))
-				{
-					JArrayHelper::toInteger( $catid );
-					$catCondition = ' AND (a.id=' . implode( ' OR a.id=', $catid ) . ')';
-				}
-				else
-				{
-					$ids = explode( ',', $catid );
-					JArrayHelper::toInteger( $ids );
-					$catCondition = ' AND (a.id=' . implode( ' OR a.id=', $ids ) . ')';
-				}			
-			}
-			
-			switch ($ordering)
-			{
-				case 'random':
-					$ordering = 'RAND()';
-					break;
-				case 'alpha':
-					$ordering = 'a.title';
-					break;
-				case 'ralpha':
-					$ordering = 'a.title DESC';
-					break;
-				case 'order':
-				default:
-					$ordering = 'a.ordering';
-					break;
-			}
-			
-			
-			// Query Sections table for all Categories that match Section ID
-		$query = 'SELECT a.id AS id, a.title AS title,a.image AS image, COUNT(b.id) as cnt' .
-			' FROM #__categories as a' .
-			' LEFT JOIN #__content as b ON b.catid = a.id' .
-			($access ? ' AND b.access <= '.(int) $gid : '') .
-			' AND ( b.publish_up = "'.$nullDate.'" OR b.publish_up <= "'.$now.'" )' .
-			' AND ( b.publish_down = "'.$nullDate.'" OR b.publish_down >= "'.$now.'" )' .
-			' WHERE a.published = 1' .
-			($catid ? $catCondition : '').
-			($access ? ' AND a.access <= '.$gid : '') .
-			' GROUP BY a.id '.
-			' ORDER BY '. $ordering;
-						
-		$db->setQuery($query, 0, $count);
-		$rows = $db->loadObjectList();
-		
-		foreach($rows as $row){
-			$row->link = JRoute::_(ContentHelperRoute::getCategoryRoute($row->id,'').'&layout=blog');
-		}
+				//$item->slug = $item->id.':'.$item->alias;
+				//$item->catslug = $item->catid ? $item->catid .':'.$item->category_alias : $item->catid;
 
-		return $rows;
+				if ($access || in_array($item->access, $authorised)) {
+
+					//$item->link = JRoute::_(ContentHelperRoute::getCategoryRoute($item->id).'&layout=blog');
+				}
+				 else {
+					// Angie Fixed Routing
+					$app	= JFactory::getApplication();
+					$menu	= $app->getMenu();
+					$menuitems	= $menu->getItems('link', 'index.php?option=com_users&view=login');
+				if(isset($menuitems[0])) {
+						$Itemid = $menuitems[0]->id;
+					} else if (JRequest::getInt('Itemid') > 0) { //use Itemid from requesting page only if there is no existing menu
+						$Itemid = JRequest::getInt('Itemid');
+					}
+
+					$item->link = JRoute::_('index.php?option=com_users&view=login&Itemid='.$Itemid);
+					}
+		
+				
+			}
+			//print_r($items);
+			return $items;	
+			
+			
+			
 	}
 		else if
 		($type == "content") {
 	
 				$articles = JModel::getInstance('Articles', 'ContentModel', array('ignore_request' => true));
 				$articles->setState('params', $appParams);
-				$catid		= $params->get('catid');
-				$artid		= $params->get('artid');
+				$artids		= $params->get('artid');
 				$show_front	= $params->get('show_front', 1);
 				// Set the filters based on the module params
 				$articles->setState('list.start', 0);
@@ -159,8 +138,12 @@ abstract class modCaptifycontentHelper
 					}
 
 					$articles->setState('filter.category_id', $catids);
+					
 				}
-
+				if($artids) {
+					$articles->setState('filter.article_id', $artids);
+					$articles->setState('filter.article_id.include', $params->get('article_filtering_type', 1));
+				}
 				// Ordering
 				$articles->setState('list.ordering', $params->get('ordering', 'a.ordering'));
 				$articles->setState('list.direction', $params->get('ordering_direction', 'ASC'));
