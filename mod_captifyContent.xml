@@ -45,7 +45,7 @@
             <option value="body">Yes - Load in the body but not xhtml valid</option>
             <option value="no">Disable scripts</option>
         </param>
-        <param type="panel" panel="panelCategory" title="Category Display Settings"/>
+        <param type="panel" panel="panelCategory" title="Section Display Settings"/>
         <param name="sectionid" type="sectionsmultiple" default="" label="Select Sections" description="PARAMSECTIONID" />
         <param name="secOrdering" type="list" default="order" label="Ordering of Sections" description="Select the order in which the section items to appear.">
             <option value="alpha">Title Alphabetical</option>
