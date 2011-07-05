@@ -37,29 +37,52 @@ abstract class modCaptifycontentHelper
 		$appParams = $app->getParams();
 		
 		if ($type == "category") {
-			$catids = $params->get('catid');
+			//echo $params->get('c_catid','0');
+			$catids = $params->get('c_catid','0');
 			$access = !JComponentHelper::getParams('com_content')->get('show_noauth');
 			$authorised = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'));
 			$categories = JModel::getInstance('Categories', 'ContentModel', array('ignore_request' => true));
-			$categories->setState('params', $appParams);
-			$levels = $params->get('levels', 1) ? $params->get('levels', 1) : 9999;
-			$categories->setState('list.start', 0);
-			$categories->setState('list.limit', (int) $params->get('count', 5));
-			$categories->setState('filter.get_children', $levels);
-			$categories->setState('filter.published', 1);
+			$catCount = $params->get('count', 5);
+			$levels = $params->get('c_levels', 1) ? $params->get('c_levels', 1) : 9999;			
+			$categories->setState('filter.published', '1');
 			$categories->setState('filter.access', $access);
-			$categories->setState('filter.parentId', $catids);
-			$categories->setState('category.id',$catids);
-			//$items = $categories->getItems(true);
+			if ($catids && $params->get('c_show_child_category_articles', 0) && (int) $params->get('c_levels', 0) > 0) {
+				$additional_catids = array();
+				foreach($catids as $catid)
+				{
+					$categories->setState('filter.parentId', $catid);
+					$recursive = true;
+					$items = $categories->getItems($recursive);
+
+					if ($items)
+					{
+						foreach($items as $category)
+						{
+							$condition = (($category->level - $categories->getParent()->level) <= $levels);
+							if ($condition) {
+								$additional_catids[] = $category->id;
+							}
+
+						}
+					}
+				}
+
+				$catids = array_unique(array_merge($catids, $additional_catids));
+			}
 			
-			foreach ( $items as $item )
+			$items = array();
+			$jcategory = JCategories::getInstance('Content');
+		
+			if (is_array($catids)) foreach ( $catids as $catid )
 			{
-				//$item->slug = $item->id.':'.$item->alias;
-				//$item->catslug = $item->catid ? $item->catid .':'.$item->category_alias : $item->catid;
+				$catitem = $jcategory->get($catid);
+				if(!($catitem->published)) continue;
+				$catitem->slug = $catitem->id.':'.$catitem->alias;
+				$catitem->catslug = $catitem->id ? $catitem->id .':'.$catitem->alias : $catitem->id;
 
-				if ($access || in_array($item->access, $authorised)) {
+				if ($access || in_array($catitem->access, $authorised)) {
 
-					//$item->link = JRoute::_(ContentHelperRoute::getCategoryRoute($item->id).'&layout=blog');
+					$catitem->link = JRoute::_(ContentHelperRoute::getCategoryRoute($catitem->id).'&layout=blog');
 				}
 				 else {
 					// Angie Fixed Routing
@@ -72,12 +95,12 @@ abstract class modCaptifycontentHelper
 						$Itemid = JRequest::getInt('Itemid');
 					}
 
-					$item->link = JRoute::_('index.php?option=com_users&view=login&Itemid='.$Itemid);
+					$catitem->link = JRoute::_('index.php?option=com_users&view=login&Itemid='.$Itemid);
 					}
-		
+					
+				$items[] = $catitem;
 				
 			}
-			//print_r($items);
 			return $items;	
 			
 			
@@ -85,7 +108,7 @@ abstract class modCaptifycontentHelper
 	}
 		else if
 		($type == "content") {
-	
+				$catids = $params->get('catid');
 				$articles = JModel::getInstance('Articles', 'ContentModel', array('ignore_request' => true));
 				$articles->setState('params', $appParams);
 				$artids		= $params->get('artid');
@@ -185,7 +208,7 @@ abstract class modCaptifycontentHelper
 			
 					$item->text = $item->introtext;
 				}
-
+				
 				return $items;
 			}
 		}

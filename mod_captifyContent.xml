@@ -23,7 +23,7 @@
 			<fieldset name="general" group="general" label="General Settings">
         		<field name="type" type="list" default="section" label="Image Content source" description="Select whether to display categories or Joomla content items.">
 		            <option value="content">Joomla Article Images</option>
-		            <!--<option value="category">Joomla Category Images</option>-->
+		            <option value="category">Joomla Category Images</option>
 		        </field>
 		        <field name="count" type="text" default="5" label="Item Count" description="The number of items to display (default is 5)" />
 		        <field name="imagesPerRow" type="text" default="3" label="Items Per Row" description="Set the number of images to be per row." />
@@ -45,7 +45,7 @@
 		            <option value="no">Disable scripts</option>
 		        </field>
 			</fieldset>
-        	<fieldset name="articles" group="articles" label="Content Filtering Options">
+        	<fieldset name="articles" group="articles" label="Content Image Filtering Options">
 				<field name="category_filtering_type" type="radio"
 				default="1"
 				label="Category Filtering Type"
@@ -119,6 +119,32 @@
 					<option value="ASC">Ascending</option>
 				</field>
 			</fieldset>
+				<fieldset name="categories" group="categories" label="Category Image Filtering Options">
+
+			        <field name="c_catid" type="category" extension="com_content" multiple="true" size="5" default="" label="Categories" description="PARAMCATEGORYID">
+					</field>
+					<field name="c_show_child_category_articles" type="radio"	default="0" label="Child Categories" description="Choose to include child categories in the above category selection">
+						<option value="1">Include</option>
+						<option value="0">Exclude</option>
+					</field>
+					<field name="c_levels" type="text" default="1" label="Category Depth" description="Specify the number of sub category levels to be included" />
+					<!--<field name="filteringspacerc3" type="spacer" hr="true" />
+			        <field name="c_ordering" type="list" default="a.ordering" label="Ordering" description="Ordering options">
+			            <option value="a.ordering">Joomla! Ordering</option>
+						<option value="a.hits">Hits</option>
+						<option value="a.title">Title</option>
+						<option value="a.id">ID</option>
+						<option value="a.alias">Alias</option>
+						<option value="a.created">Created Date</option>
+						<option value="modified">Modified Date</option>
+						<option value="publish_up">Start Publishing Date</option>
+						<option value="a.publish_down">Finish Publishing Date</option>
+			        </field>
+					<field name="c_ordering_direction" type="list" default="ASC" label="Ordering Direction" description="Choose to order articles by the above selection option in ascending or descing order." >
+						<option value="DESC">Descending</option>
+						<option value="ASC">Ascending</option>
+					</field>-->
+				</fieldset>
         	<fieldset name="imagesettings" group="imagesettings" label="Image Settings">
         		<field name="image_width" type="text" default="245" label="Width of the resized image" description="Set the width of the resized image." />
 		        <field name="image_height" type="text" default="100" label="Height of the resized image" description="Set the width of the resized image." />
