@@ -82,7 +82,6 @@
 					description="Select the articles to use for content filtering"
 					query="SELECT id, title FROM #__content ORDER BY title"
 					key_field="id" value_field="title">
-					<option value="">Select All Articles</option>
 				</field>
 		        <!--    <field name="article_source" type="list" default="cat" label="Article Source" description="Choose how you would like to specify the article sources">
 		      		<option value="cat">Categories</option>
