@@ -139,7 +139,9 @@ jQuery.fn.extend({
 				//ensure the background is on bottom
 
 				var captionPositioning = jQuery.browser.msie ? 'static' : 'relative';
-
+				if (jQuery.browser.msie && jQuery.browser.version.substr(0,1)>8) {
+					captionPositioning = 'relative';
+				}
 				caption.css({
 
 					zIndex: 1,
