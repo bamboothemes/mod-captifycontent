@@ -76,12 +76,15 @@ echo (print_r($module));
 	$displayImages = $params->get('displayImages','k2item');
 	$titleBelow = $params->get('titleBelow','0');
 	$contentSource = $params->get('type','article');
-
+	$scripts = $params->get('scripts', 1);
+	
 	// Load css into the head
-	if(!$zgf) {
-		if(!$cache) {
-			$document->addStyleSheet($modbase.'css/captifyContent.css');	
-			if ($useCaptify == '2') { $document->addScript($modbase . "js/captify.tiny.js");}
+	if($scripts) {
+		if(!$zgf) {
+			if(!$cache) {
+				$document->addStyleSheet($modbase.'css/captifyContent.css');	
+				if ($useCaptify == '2') { $document->addScript($modbase . "js/captify.tiny.js");}
+			}
 		}
 	}
 
