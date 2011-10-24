@@ -42,7 +42,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // Include the syndicate functions only once
 	require_once (dirname(__FILE__).DS.'helper.php');
-echo (print_r($module));
+
 	$document =& JFactory::getDocument();
 	$modbase = JURI::base(true).'/modules/mod_captifyContent/';
 	$module_id = $module->id;
