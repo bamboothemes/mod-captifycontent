@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.7.0" method="upgrade">
+    <name>JB Captify Content</name>
+    <author>Joomla Bamboo</author>
+    <creationDate>April 2011</creationDate>
+    <copyright>This extension in released under the GNU/GPL License - http://www.gnu.org/copyleft/gpl.html</copyright>
+    <authorEmail>design@joomlabamboo.com</authorEmail>
+    <authorUrl>http://www.joomlabamboo.com</authorUrl>
+    <version>1.1.0</version>
+    <description>Captify Content displays the image assigned to your categories or articles and the title using the awesome captifyScript. If the section or category does not have an image assigned to it then it will not show. Please note that you need to have the JB Library plugin installed and published for this module to work as desired.</description>
+    <files>
+        <filename module="mod_captifyContent">mod_captifyContent.php</filename>
+		<filename>mod_captifyContent.xml</filename>
+        <filename>helper.php</filename>
+        <filename>index.html</filename>
+        <folder>fields</folder>
+        <folder>tmpl</folder>
+        <folder>css</folder>
+        <folder>js</folder>
+    </files>
+	<config>    
+		<fields name="params" addfieldpath="/modules/mod_captifyContent/fields">
+			<fieldset name="general" group="general" label="General Settings">
+        		<field name="type" type="list" default="section" label="Image Content source" description="Select whether to display categories or Joomla content items.">
+		            <option value="content">Joomla Article Images</option>
+		            <option value="category">Joomla Category Images</option>
+		        </field>
+		        <field name="count" type="text" default="5" label="Item Count" description="The number of items to display (default is 5)" />
+		        <field name="imagesPerRow" type="text" default="3" label="Items Per Row" description="Set the number of images to be per row." />
+		        <field name="titleBelow" type="list" default="0" label="Display title below image" description="Display the title below the image">
+		            <option value="1">Yes</option>
+		            <option value="0">No</option>
+		        </field>
+			</fieldset>
+        	<fieldset name="scripts" group="scripts" label="Captify Content Scripts">
+        		<field name="scripts" type="radio" default="article" label="CSS and Javascript" description="This option can be used to remove all javascript and css from being loaded by the microblog module. If in doubt leave this option enabled. If you are using the Zen Grid framework version2 then the scripts and css files will be loaded via the framework. If your site uses caching then the relevant files will be loaded into the body of your site.">
+			            <option value="1">Enable CSS and Javascript</option>
+			            <option value="0">Disable CSS and Javascript</option>
+			        </field>
+			</fieldset>
+        	<fieldset name="articles" group="articles" label="Content Image Filtering Options">
+				<field name="category_filtering_type" type="radio"
+				default="1"
+				label="Category Filtering Type"
+				description="Select Inclusive to Include the selcted categories or Exclusive to Exclude the selected categories"
+			>
+				<option value="1">Inclusive</option>
+				<option value="0">Exclusive</option>
+			</field>
+		        <field name="catid" type="category" extension="com_content" multiple="true" size="5" default="" label="Categories" description="PARAMCATEGORYID">
+					<option value="">Select All Categories</option>
+				</field>
+				<field name="show_child_category_articles" type="radio"	default="0" label="Child Categories" description="Choose to include child categories in the above category selection">
+					<option value="1">Include</option>
+					<option value="0">Exclude</option>
+				</field>
+				<field name="levels" type="text" default="1" label="Category Depth" description="Specify the number of sub category levels to be included" />
+				<field name="filteringspacer12" type="spacer" hr="true" />
+				<field type="info" name="articleinfo" default="The following options are particularly relevant to using articles as a source of Captify images. Picking a value of Select all Articles will not filter any articles except by the category selctions above. If you have chosen to display images from categories then the following settings can be ignored." />
+				<field name="show_front" type="radio" default="show" label="Show Featured Articles" description="Choose to show, hide or show only featured articles">
+					<option value="show">Show</option>
+					<option value="hide">Hide</option>
+					<option value="only">Only</option>
+				</field>
+				<field name="article_filtering_type" type="radio"
+				default="1"
+				label="Article Filtering Type"
+				description="Select Inclusive to Include the selected articles or Exclusive to Exclude the selected articles">
+					<option value="1">Inclusive</option>
+					<option value="0">Exclusive</option>
+				</field>
+				<field name="artid" type="sql"
+					multiple="true" size="10"
+					label="Articles"
+					description="Select the articles to use for content filtering"
+					query="SELECT id, title FROM #__content ORDER BY title"
+					key_field="id" value_field="title">
+				</field>
+		        <!--    <field name="article_source" type="list" default="cat" label="Article Source" description="Choose how you would like to specify the article sources">
+		      		<option value="cat">Categories</option>
+				      <option value="art">Articles</option>
+				      <option value="catart">Categories + Articles</option>
+				    </field>-->
+				<field name="filteringspacer11" type="spacer" hr="true" />
+				<field name="author_filtering_type" type="radio" default="1" label="Author Filtering Type" description="Select Inclusive to Include the selcted authors or Exclusive to Exclude the selected authors " >
+					<option value="1">Inclusive</option>
+					<option value="0">Exclusive</option>
+				</field>
+				<field name="created_by" type="sql"
+					multiple="true" size="5"
+					label="Authors"
+					description="Select the Authors to use for category filtering"
+					query="select id, name, username from #__users where id IN (select distinct(created_by) from #__content) order by name ASC"
+					key_field="id" value_field="name">
+					<option value="">JOPTION_SELECT_AUTHORS</option>
+				</field>
+				<field name="filteringspacer3" type="spacer" hr="true" />
+		        <field name="ordering" type="list" default="a.ordering" label="Ordering" description="Ordering options">
+		            <option value="a.ordering">Joomla! Ordering</option>
+					<option value="a.hits">Hits</option>
+					<option value="a.title">Title</option>
+					<option value="a.id">ID</option>
+					<option value="a.alias">Alias</option>
+					<option value="a.created">Created Date</option>
+					<option value="modified">Modified Date</option>
+					<option value="publish_up">Start Publishing Date</option>
+					<option value="a.publish_down">Finish Publishing Date</option>
+		        </field>
+				<field name="ordering_direction" type="list" default="ASC" label="Ordering Direction" description="Choose to order articles by the above selection option in ascending or descing order." >
+					<option value="DESC">Descending</option>
+					<option value="ASC">Ascending</option>
+				</field>
+			</fieldset>
+				<fieldset name="categories" group="categories" label="Category Image Filtering Options">
+
+			        <field name="c_catid" type="category" extension="com_content" multiple="true" size="5" default="" label="Categories" description="PARAMCATEGORYID">
+					</field>
+					<field name="c_show_child_category_articles" type="radio"	default="0" label="Child Categories" description="Choose to include child categories in the above category selection">
+						<option value="1">Include</option>
+						<option value="0">Exclude</option>
+					</field>
+					<field name="c_levels" type="text" default="1" label="Category Depth" description="Specify the number of sub category levels to be included" />
+					<!--<field name="filteringspacerc3" type="spacer" hr="true" />
+			        <field name="c_ordering" type="list" default="a.ordering" label="Ordering" description="Ordering options">
+			            <option value="a.ordering">Joomla! Ordering</option>
+						<option value="a.hits">Hits</option>
+						<option value="a.title">Title</option>
+						<option value="a.id">ID</option>
+						<option value="a.alias">Alias</option>
+						<option value="a.created">Created Date</option>
+						<option value="modified">Modified Date</option>
+						<option value="publish_up">Start Publishing Date</option>
+						<option value="a.publish_down">Finish Publishing Date</option>
+			        </field>
+					<field name="c_ordering_direction" type="list" default="ASC" label="Ordering Direction" description="Choose to order articles by the above selection option in ascending or descing order." >
+						<option value="DESC">Descending</option>
+						<option value="ASC">Ascending</option>
+					</field>-->
+				</fieldset>
+        	<fieldset name="imagesettings" group="imagesettings" label="Image Settings">
+        		<field name="image_width" type="text" default="245" label="Width of the resized image" description="Set the width of the resized image." />
+		        <field name="image_height" type="text" default="100" label="Height of the resized image" description="Set the width of the resized image." />
+		        <field name="option" type="list" default="1" label="Resize Method" description="The method you would like to use when resizing images.">
+		            <option value="crop">Smart Resize and Crop</option>
+		            <option value="landscape">Landscape Resize and Crop</option>
+		            <option value="portrait">Portrait Resize and Crop</option>
+		            <option value="auto">Auto Resize and Crop</option>
+		            <option value="exact">Exact Resize</option>
+		            <option value="topleft">Exact Crop from Top Left</option>
+		            <option value="center">Exact Crop from Center</option>
+		        </field>
+		        <field name="imageDimensions" type="list" default="1" label="Output image height and width?" description="This option when enabled prints the height and width of the images as a style declaration. This option is beneficial for site loading and seo but may have adverse results if the crop width and height ratios do not match the image width and image heights of the original image">
+		            <option value="1">Yes</option>
+		            <option value="0">No</option>
+		        </field>
+		        <field name="rightMargin" type="text" default="0" label="Thumbnail right margin" description="Enter a px unit for the right margin of the images. Applied if equalising margins are disabled. " />
+		        <field name="bottomMargin" type="text" default="0" label="Thumbnail bottom margin" description="Enter a px unit for the bottom margin of the images." />
+			</fieldset>
+        	<fieldset name="transition" group="transition" label="Transition Settings">
+        		<field name="useCaptify" type="list" default="1" label="Enable the hover effect?" description="Set this option to yes if you want to display the transition effect when hovering over the item. By setting this option to no you can use the captify module as an image menu that directs the user to the content, categories or sections when clicked.">
+		            <option value="1">Yes - Image Overlay</option>
+		            <option value="2">Yes - Title Overlay</option>
+		            <option value="0">No</option>
+		        </field>
+		        <field name="background" type="list" default="1" label="Background Theme" description="Enable image fade effects on page load and mouse hover">
+		            <option value="light-background">Light Background</option>
+		            <option value="dark-background">Dark Background</option>
+		        </field>
+		        <field name="transition" type="list" default="slide" label="Overlay Transition Type" description="Select the type of transition used to display the overlay title when the image is moused over.">
+		            <option value="slide">Slide</option>
+		            <option value="fade">Fade</option>
+		        </field>
+		        <field name="position" type="list" default="bottom" label="Overlay Position" description="Original positioning of the overlay effect">
+		            <option value="top">Top</option>
+		            <option value="bottom">Bottom</option>
+		        </field>
+		        <field name="speed" type="text" default="800" label="Transition Speed In" description="The speed that the captify transition should occur in ms." />
+		        <field name="speedOut" type="text" default="800" label="Transition Speed Out" description="The speed that the captify transition should occur in ms after the mouse leaves the image." />
+		        <field name="fadeEffect" type="list" default="1" label="Image Fade on Hover" description="Enable image fade effects on page load and mouse hover">
+		            <option value="1">Yes</option>
+		            <option value="0">No</option>
+		        </field>
+			</fieldset>
+			<fieldset name="advanced" group="advanced" label="Advanced Options">
+        		<field name="cache" type="list" default="0" label="Caching" description="Select whether to cache the content of this module">
+		            <option value="1">Use global</option>
+		            <option value="0">No caching</option>
+		        </field>
+		        <field name="cache_time" type="text" default="900" label="Cache Time" description="The time before the module is recached" />
+		        <field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+			</fieldset>
+    	</fields>
+	</config>
+</extension>
