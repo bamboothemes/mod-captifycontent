@@ -1,4 +1,7 @@
 <?php
+/// no direct access
+defined('_JEXEC') or die('Restricted access');
+
 class JFormFieldK2itemslist extends JFormField
 {
    protected   $type = 'k2itemslist';
