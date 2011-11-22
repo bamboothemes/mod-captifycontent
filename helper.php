@@ -686,7 +686,7 @@ if (file_exists($k2file)){
 			}
 
 			if($contentSource == "k2category"){
-
+			
 				$limit = $params->get('countcc', 5);
 				$cid = $params->get('k2catid', NULL);
 				$ordering = $params->get('orderingK2');
@@ -697,11 +697,24 @@ if (file_exists($k2file)){
 				$jnow = &JFactory::getDate();
 				$now = $jnow->toMySQL();
 				$nullDate = $db->getNullDate();
-		
-				$query = "SELECT c.*";
-				$query .= " FROM #__k2_categories as c";
-				$query .= " WHERE c.published = 1 AND c.access <= {$aid} AND c.trash = 0";
-		
+				$itemid = $params->get('itemid','');
+
+				$query = "SELECT i.*, c.name AS categoryname,c.id AS categoryid, c.alias AS categoryalias, c.params AS categoryparams";
+
+				if ($ordering == 'best')
+					$query .= ", (r.rating_sum/r.rating_count) AS rating";
+
+				$query .= " FROM #__k2_items as i LEFT JOIN #__k2_categories c ON c.id = i.catid";
+
+				if ($ordering == 'best')
+					$query .= " LEFT JOIN #__k2_rating r ON r.itemID = i.id";
+
+				$query .= " WHERE i.published = 1 AND i.access <= {$aid} AND i.trash = 0 AND c.published = 1 AND c.access <= {$aid} AND c.trash = 0";
+
+				$query .= " AND ( i.publish_up = ".$db->Quote($nullDate)." OR i.publish_up <= ".$db->Quote($now)." )";
+
+				$query .= " AND ( i.publish_down = ".$db->Quote($nullDate)." OR i.publish_down >= ".$db->Quote($now)." )";
+
 				if (!is_null($cid)) {
 					if (is_array($cid)) {
 						if ($params->get('getChildren')) {
@@ -739,56 +752,115 @@ if (file_exists($k2file)){
 					}
 				}
 
+				if ($params->get('itemFilter') == 'feat')
+					$query .= " AND i.featured = 1";				
+				else if ($params->get('itemFilter') == 'hide')
+					$query .= " AND i.featured = 0";
+
 				switch ($ordering) {
 
+					case 'date':
+					$orderby = 'i.created ASC';
+					break;
+
+					case 'rdate':
+					$orderby = 'i.created DESC';
+					break;
+
 					case 'alpha':
-						$orderby = 'c.name';
+					$orderby = 'i.title';
 					break;
 
 					case 'ralpha':
-						$orderby = 'c.name DESC';
-					break;
-
-					case 'rand':
-						$orderby = 'RAND()';
+					$orderby = 'i.title DESC';
 					break;
 
 					case 'order':
-						$orderby = 'c.ordering';
+					if ($params->get('itemFilter') == 'feat')
+					  $orderby = 'i.featured_ordering';
+					else
+					  $orderby = 'i.ordering';
+					break;
+
+					case 'hits':
+					$orderby = 'i.hits DESC';
+					break;
+
+					case 'rand':
+					$orderby = 'RAND()';
+					break;
+
+					case 'best':
+					$orderby = 'rating DESC';
 					break;
 
 					default:
-						$orderby = 'c.ordering';
+					$orderby = 'i.id DESC';
 					break;
 				}
-
+		
 				$query .= " ORDER BY ".$orderby;
 				$db->setQuery($query, 0, $limit);
 				$items = $db->loadObjectList();
 
 				require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'item.php');
-
 				$model = new K2ModelItem;
 
 				require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'helpers'.DS.'route.php');
 
 				if (count($items)) {
-					$k2ImageSource = $params->get('displayImages','k2item');
-					
-					foreach ($items as $item) {
-						//Images
 
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'categories'.DS.$item->image))
-							$item->image = 'media/k2/categories/'.$item->image;
+					$k2ImageSource = $params->get('displayImages','k2item');
+
+					foreach ($items as $item) {
+					
+						//Images
+						if($k2ImageSource == "k2item") {
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'src'.DS.md5("Image".$item->id).'.jpg'))
+								$item->imageOriginal = 'media/k2/items/src/'.md5("Image".$item->id).'.jpg';
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_XS.jpg'))
+								$item->imageXSmall = 'media/k2/items/cache/'.md5("Image".$item->id).'_XS.jpg';
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_S.jpg'))
+								$item->imageSmall = 'media/k2/items/cache/'.md5("Image".$item->id).'_S.jpg';
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_M.jpg'))
+								$item->imageMedium = 'media/k2/items/cache/'.md5("Image".$item->id).'_M.jpg';
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_L.jpg'))
+								$item->imageLarge = 'media/k2/items/cache/'.md5("Image".$item->id).'_L.jpg';
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_XL.jpg'))
+								$item->imageXLarge = 'media/k2/items/cache/'.md5("Image".$item->id).'_XL.jpg';
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_Generic.jpg'))
+								$item->imageGeneric = 'media/k2/items/cache/'.md5("Image".$item->id).'_Generic.jpg';
+
+							$image = 'image'.$params->get('itemImageSize');
+							
+							if(isset($item->$image)) {
+								$item->firstimage = $item->$image;
+							} else {
+								$item->firstimage = "";
+							}
+
+						} elseif ($k2ImageSource == "k2content"){
+							$item->firstimage = "";
+						}
+
+						$item->numOfComments = $model->countItemComments($item->id);
 
 						//Read more link
-						$item->link = urldecode(JRoute::_(K2HelperRoute::getCategoryRoute($item->id.':'.urlencode($item->alias))));
 
+						$item->link = urldecode(JRoute::_(K2HelperRoute::getItemRoute($item->id.':'.urlencode($item->alias), $item->catid.':'.urlencode($item->categoryalias))));
+						
 						// Item text
-						$item->title = $item->name;
-
+						$item->text = $item->introtext;
 						$rows[] = $item;
 					}
+					
 					return $rows;
 				}
 			}
@@ -993,7 +1065,9 @@ if (file_exists($k2file)){
 			}
 
 			if($contentSource == "k2category"){
-
+			
+			
+			
 				$limit = $params->get('countcc', 5);
 				$cid = $params->get('k2catid', NULL);
 				$ordering = $params->get('orderingK2');
@@ -1004,18 +1078,53 @@ if (file_exists($k2file)){
 				$jnow = &JFactory::getDate();
 				$now = $jnow->toMySQL();
 				$nullDate = $db->getNullDate();
-		
-				$query = "SELECT c.*";
-				$query .= " FROM #__k2_categories as c";
-				$query .= " WHERE c.published = 1 AND c.trash = 0";
+				$itemid = $params->get('itemid','');
+
+				if (is_array($cid)) {				
+					$tempCat = array();					
+					foreach($cid as $catId) {
+						if(!empty($catId))
+							$tempCat[] = (int)$catId;
+					}
+					$cid = array();
+					$cid = $tempCat;
+				}
+				
+				$query = "SELECT i.*, c.name AS categoryname,c.id AS categoryid, c.alias AS categoryalias, c.params AS categoryparams";
+
+				if ($ordering == 'best')
+					$query .= ", (r.rating_sum/r.rating_count) AS rating";
+
+				$query .= " FROM #__k2_items as i LEFT JOIN #__k2_categories c ON c.id = i.catid";
+
+				if ($ordering == 'best')
+					$query .= " LEFT JOIN #__k2_rating r ON r.itemID = i.id";
+
+				$query .= " WHERE i.published = 1 AND i.trash = 0 AND c.published = 1 AND c.trash = 0";
+				
+				if(K2_JVERSION=='16'){
+					$query .= " AND i.access IN(".implode(',', $user->authorisedLevels()).") ";
+				}
+				else {
+					$query .=" AND i.access<={$aid} ";
+				}
 				
 				if(K2_JVERSION=='16'){
 					$query .= " AND c.access IN(".implode(',', $user->authorisedLevels()).") ";
-				} else {
+				}
+				else {
 					$query .=" AND c.access<={$aid} ";
 				}
 
-				if (!is_null($cid)) {
+				$query .= " AND ( i.publish_up = ".$db->Quote($nullDate)." OR i.publish_up <= ".$db->Quote($now)." )";
+
+				$query .= " AND ( i.publish_down = ".$db->Quote($nullDate)." OR i.publish_down >= ".$db->Quote($now)." )";
+
+				if(!is_array($itemid)) {
+					$itemid		= preg_split("/[\s,]+/", $itemid);
+				}
+				
+				if (!empty($cid)) {
 				
 					if (is_array($cid)) {
 					
@@ -1053,61 +1162,133 @@ if (file_exists($k2file)){
 						}
 					}
 				}
+				
+				if ($params->get('itemFilter') == 'feat')
+					$query .= " AND i.featured = 1";
+				else if ($params->get('itemFilter') == 'hide')
+					$query .= " AND i.featured = 0";
+		
+				if(K2_JVERSION=='16'){
+					if($mainframe->getLanguageFilter()) {
+						$languageTag = JFactory::getLanguage()->getTag();
+						$query .= " AND c.language IN (".$db->Quote($languageTag).", ".$db->Quote('*').") AND i.language IN (".$db->Quote($languageTag).", ".$db->Quote('*').")";
+					}
+				}
 
 				switch ($ordering) {
 
+					case 'date':
+					$orderby = 'i.created ASC';
+					break;
+
+					case 'rdate':
+					$orderby = 'i.created DESC';
+					break;
+
 					case 'alpha':
-						$orderby = 'c.name';
+					$orderby = 'i.title';
 					break;
 
 					case 'ralpha':
-						$orderby = 'c.name DESC';
-					break;
-
-					case 'rand':
-						$orderby = 'RAND()';
+					$orderby = 'i.title DESC';
 					break;
 
 					case 'order':
-						$orderby = 'c.ordering';
+					if ($params->get('itemFilter') == 'feat')
+					  $orderby = 'i.featured_ordering';
+					else
+					  $orderby = 'i.ordering';
+					break;
+
+					case 'hits':
+					$orderby = 'i.hits DESC';
+					break;
+
+					case 'rand':
+					$orderby = 'RAND()';
+					break;
+
+					case 'best':
+					$orderby = 'rating DESC';
 					break;
 
 					default:
-						$orderby = 'c.ordering';
+					$orderby = 'i.id DESC';
 					break;
-
 				}
-
+		
 				$query .= " ORDER BY ".$orderby;
 				$db->setQuery($query, 0, $limit);
 				$items = $db->loadObjectList();
 
 				require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'item.php');
-
 				$model = new K2ModelItem;
 
 				require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'helpers'.DS.'route.php');
 
-				if (count($items)) {
-					$k2ImageSource = $params->get('displayImages','k2item');
-					
-					foreach ($items as $item) {
-						//Images
 
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'categories'.DS.$item->image))
-							$item->image = 'media/k2/categories/'.$item->image;
+				if (count($items)) {
+
+					$k2ImageSource = $params->get('displayImages','k2item');
+
+					foreach ($items as $item) {
+					
+						//Images
+						if($k2ImageSource == "k2item") {
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'src'.DS.md5("Image".$item->id).'.jpg'))
+								$item->imageOriginal = 'media/k2/items/src/'.md5("Image".$item->id).'.jpg';
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_XS.jpg'))
+								$item->imageXSmall = 'media/k2/items/cache/'.md5("Image".$item->id).'_XS.jpg';
+
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_S.jpg'))
+								$item->imageSmall = 'media/k2/items/cache/'.md5("Image".$item->id).'_S.jpg';
+
+								
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_M.jpg'))
+								$item->imageMedium = 'media/k2/items/cache/'.md5("Image".$item->id).'_M.jpg';
+
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_L.jpg'))
+								$item->imageLarge = 'media/k2/items/cache/'.md5("Image".$item->id).'_L.jpg';
+
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_XL.jpg'))
+								$item->imageXLarge = 'media/k2/items/cache/'.md5("Image".$item->id).'_XL.jpg';
+
+
+							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_Generic.jpg'))
+								$item->imageGeneric = 'media/k2/items/cache/'.md5("Image".$item->id).'_Generic.jpg';
+
+
+							$image = 'image'.$params->get('itemImageSize');
+							
+							if(isset($item->$image)) {
+								$item->firstimage = $item->$image;
+							} else {
+								$item->firstimage = "";
+							}
+
+						} elseif ($k2ImageSource == "k2content"){
+							$item->firstimage = "";
+						}
+
+						$item->numOfComments = $model->countItemComments($item->id);
 
 						//Read more link
-						$item->link = urldecode(JRoute::_(K2HelperRoute::getCategoryRoute($item->id.':'.urlencode($item->alias))));
 
+						$item->link = urldecode(JRoute::_(K2HelperRoute::getItemRoute($item->id.':'.urlencode($item->alias), $item->catid.':'.urlencode($item->categoryalias))));
+						
 						// Item text
-						$item->title = $item->name;
-
+						$item->text = $item->introtext;
 						$rows[] = $item;
 					}
-
+					
 					return $rows;
 				}
+			
 			}
 		}
 	}	
