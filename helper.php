@@ -40,7 +40,7 @@ if (substr(JVERSION, 0, 3) >= '1.6') {
 			$type = $params->get('type', 'content');
 			$app = JFactory::getApplication();
 			$appParams = $app->getParams();
-			
+
 			if ($type == "category") {
 				//echo $params->get('c_catid','0');
 				$catids = $params->get('c_catid','0');
@@ -59,58 +59,58 @@ if (substr(JVERSION, 0, 3) >= '1.6') {
 						$recursive = true;
 						$items = $categories->getItems($recursive);
 
-						if ($items)	{
-						
-							foreach($items as $category) {
-							
+						if ($items)
+						{
+							foreach($items as $category)
+							{
 								$condition = (($category->level - $categories->getParent()->level) <= $levels);
-								
 								if ($condition) {
 									$additional_catids[] = $category->id;
 								}
+
 							}
 						}
 					}
 
 					$catids = array_unique(array_merge($catids, $additional_catids));
 				}
-				
+
 				$items = array();
 				$jcategory = JCategories::getInstance('Content');
-			
-				if (is_array($catids)) foreach ( $catids as $catid ) {
-				
+
+				if (is_array($catids)) foreach ( $catids as $catid )
+				{
 					$catitem = $jcategory->get($catid);
-					
-					if(!($catitem->published))
-						continue;
-						
+					if(!($catitem->published)) continue;
 					$catitem->slug = $catitem->id.':'.$catitem->alias;
 					$catitem->catslug = $catitem->id ? $catitem->id .':'.$catitem->alias : $catitem->id;
 
 					if ($access || in_array($catitem->access, $authorised)) {
+
 						$catitem->link = JRoute::_(ContentHelperRoute::getCategoryRoute($catitem->id).'&layout=blog');
-					} else {
+					}
+					 else {
 						// Angie Fixed Routing
 						$app	= JFactory::getApplication();
 						$menu	= $app->getMenu();
 						$menuitems	= $menu->getItems('link', 'index.php?option=com_users&view=login');
-						
-						if(isset($menuitems[0])) {
+					if(isset($menuitems[0])) {
 							$Itemid = $menuitems[0]->id;
-						} else if (JRequest::getInt('Itemid') > 0) {
-							//use Itemid from requesting page only if there is no existing menu
+						} else if (JRequest::getInt('Itemid') > 0) { //use Itemid from requesting page only if there is no existing menu
 							$Itemid = JRequest::getInt('Itemid');
 						}
 
 						$catitem->link = JRoute::_('index.php?option=com_users&view=login&Itemid='.$Itemid);
-					}
-					
+						}
+
 					$items[] = $catitem;
+
 				}
-				return $items;
-				
-			} else if($type == "content") {
+				return $items;	
+
+
+
+		} else if($type == "content") {
 		
 				$catids = $params->get('catid');
 				$articles = JModel::getInstance('Articles', 'ContentModel', array('ignore_request' => true));
@@ -931,17 +931,79 @@ if (file_exists($k2file)){
 
 				$query .= " AND ( i.publish_down = ".$db->Quote($nullDate)." OR i.publish_down >= ".$db->Quote($now)." )";
 
-				if(!is_array($itemid)) {
-					$itemid		= preg_split("/[\s,]+/", $itemid);
+				if ($params->get('catfilter')) {
+					if (!is_null($cid)) {
+						if (is_array($cid)) {
+							if ($params->get('getChildren')) {
+								require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+								$categories = K2ModelItemlist::getCategoryTree($cid);
+								$sql = @implode(',', $categories);
+								$query .= " AND i.catid IN ({$sql})";
+
+							} else {
+								JArrayHelper::toInteger($cid);
+								$query .= " AND i.catid IN(".implode(',', $cid).")";
+							}
+
+						} else {
+							if ($params->get('getChildren')) {
+								require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+								$categories = K2ModelItemlist::getCategoryTree($cid);
+								$sql = @implode(',', $categories);
+								$query .= " AND i.catid IN ({$sql})";
+							} else {
+								$query .= " AND i.catid=".(int)$cid;
+							}
+
+						}
+					}
 				}
-				JArrayHelper::toInteger( $itemid );
-				$query .= ' AND i.id IN (' . implode( ',', $itemid ) . ')';
 				
-				if ($params->get('itemFilter') == 'feat')
-					$query .= " AND i.featured = 1";
-				else if ($params->get('itemFilter') == 'hide')
-					$query .= " AND i.featured = 0";
-		
+					if($params->get('itemFilter') != 'item'){
+						if (!is_null($cid)) {
+					        if (is_array($cid)) {
+					         if ($params->get('getChildren')) {
+					           require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+					           $allChildren = array();
+					           foreach ($cid as $id) {
+					             $categories = K2ModelItemlist::getCategoryTree($id);
+					             $categories[] = $id;
+					             $categories = @array_unique($categories);
+					             $allChildren = @array_merge($allChildren, $categories);
+					           }
+					           $allChildren = @array_unique($allChildren);
+					           $sql = @implode(',', $allChildren);
+					           $query .= " AND i.catid IN ({$sql})";
+					         } else {
+					           $query .= " AND i.catid IN(".implode(',', $cid).")";
+					         }
+					       } else {
+					         if ($params->get('getChildren')) {
+					           require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+					           $categories = K2ModelItemlist::getCategoryChilds($cid);
+					           $categories[] = $cid;
+					           $categories = @array_unique($categories);
+					           $sql = @implode(',', $categories);
+					           $query .= " AND i.catid IN ({$sql})";
+					         } else {
+					           $query .= " AND i.catid={$cid}";
+					         }
+					       }
+					     }
+					}
+
+				if ($params->get('FeaturedItems') == '0')
+				$query .= " AND i.featured != 1";
+
+				if ($params->get('FeaturedItems') == '2')
+				$query .= " AND i.featured = 1";
+
+				if ($params->get('videosOnly'))
+				$query .= " AND (i.video IS NOT NULL AND i.video!='')";
+
+				if ($ordering == 'comments')
+				$query .= " AND comments.published = 1";
+
 				if(K2_JVERSION=='16'){
 					if($mainframe->getLanguageFilter()) {
 						$languageTag = JFactory::getLanguage()->getTag();

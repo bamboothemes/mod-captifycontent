@@ -112,6 +112,7 @@ $k2 = JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_k2'.DS.'admin.k2.php
 
 if((($contentSource == "k2")||($contentSource == "k2category"))&&(file_exists($k2))) {
 	$list = modCCK2ContentHelper::getList($params);
+
 } elseif(($contentSource == "content")||($contentSource == "category")||($contentSource == "section")) {
 	$list = modCaptifycontentHelper::getList($params);
 } else {
