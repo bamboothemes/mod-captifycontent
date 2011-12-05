@@ -888,8 +888,8 @@ if (file_exists($k2file)){
 			$contentSource = $params->get('type','k2');
 
 			if($contentSource == "k2"){
-
-				$limit = $params->get('countcc', 5);
+				
+				$limit = $params->get('count', 5);
 				$cid = $params->get('k2catid', NULL);
 				$ordering = $params->get('orderingK2');
 				$limitstart = JRequest::getInt('limitstart');
@@ -930,8 +930,10 @@ if (file_exists($k2file)){
 				$query .= " AND ( i.publish_up = ".$db->Quote($nullDate)." OR i.publish_up <= ".$db->Quote($now)." )";
 
 				$query .= " AND ( i.publish_down = ".$db->Quote($nullDate)." OR i.publish_down >= ".$db->Quote($now)." )";
-
-				if ($params->get('catfilter')) {
+				
+				
+				// If content source is categories
+				if($params->get('k2contentSource') != 'item'){
 					if (!is_null($cid)) {
 						if (is_array($cid)) {
 							if ($params->get('getChildren')) {
@@ -959,38 +961,12 @@ if (file_exists($k2file)){
 					}
 				}
 				
-					if($params->get('itemFilter') != 'item'){
-						if (!is_null($cid)) {
-					        if (is_array($cid)) {
-					         if ($params->get('getChildren')) {
-					           require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
-					           $allChildren = array();
-					           foreach ($cid as $id) {
-					             $categories = K2ModelItemlist::getCategoryTree($id);
-					             $categories[] = $id;
-					             $categories = @array_unique($categories);
-					             $allChildren = @array_merge($allChildren, $categories);
-					           }
-					           $allChildren = @array_unique($allChildren);
-					           $sql = @implode(',', $allChildren);
-					           $query .= " AND i.catid IN ({$sql})";
-					         } else {
-					           $query .= " AND i.catid IN(".implode(',', $cid).")";
-					         }
-					       } else {
-					         if ($params->get('getChildren')) {
-					           require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
-					           $categories = K2ModelItemlist::getCategoryChilds($cid);
-					           $categories[] = $cid;
-					           $categories = @array_unique($categories);
-					           $sql = @implode(',', $categories);
-					           $query .= " AND i.catid IN ({$sql})";
-					         } else {
-					           $query .= " AND i.catid={$cid}";
-					         }
-					       }
-					     }
-					}
+				// If content source is just items
+				if($params->get('k2contentSource') == 'item'){
+					JArrayHelper::toInteger( $itemid );
+					$query .= ' AND (i.id=' . implode( ' OR i.id=', $itemid ) . ')';
+				}
+
 
 				if ($params->get('FeaturedItems') == '0')
 				$query .= " AND i.featured != 1";
@@ -1100,7 +1076,7 @@ if (file_exists($k2file)){
 
 
 							$image = 'image'.$params->get('itemImageSize');
-							
+					
 							if(isset($item->$image)) {
 								$item->firstimage = $item->$image;
 							} else {
@@ -1125,233 +1101,121 @@ if (file_exists($k2file)){
 					return $rows;
 				}
 			}
-
+			
 			if($contentSource == "k2category"){
-			
-			
-			
-				$limit = $params->get('countcc', 5);
-				$cid = $params->get('k2catid', NULL);
-				$ordering = $params->get('orderingK2');
-				$limitstart = JRequest::getInt('limitstart');
-				$user = &JFactory::getUser();
-				$aid = $user->get('aid');
-				$db = &JFactory::getDBO();
-				$jnow = &JFactory::getDate();
-				$now = $jnow->toMySQL();
-				$nullDate = $db->getNullDate();
-				$itemid = $params->get('itemid','');
-
-				if (is_array($cid)) {				
-					$tempCat = array();					
-					foreach($cid as $catId) {
-						if(!empty($catId))
-							$tempCat[] = (int)$catId;
-					}
-					$cid = array();
-					$cid = $tempCat;
-				}
 				
-				$query = "SELECT i.*, c.name AS categoryname,c.id AS categoryid, c.alias AS categoryalias, c.params AS categoryparams";
+				$limit = $params->get('count', 5);
+			    $cid = $params->get('k2catid', NULL);
+			    $ordering = $params->get('orderingK2');
+			    $limitstart = JRequest::getInt('limitstart');
+			    $user = &JFactory::getUser();
+			    $aid = $user->get('aid');
+			    $db = &JFactory::getDBO();
+			    $jnow = &JFactory::getDate();
+			    $now = $jnow->toMySQL();
+			    $nullDate = $db->getNullDate();
 
-				if ($ordering == 'best')
-					$query .= ", (r.rating_sum/r.rating_count) AS rating";
+			    $query = "SELECT c.*";
+			    $query .= " FROM #__k2_categories as c";      
+			    $query .= " WHERE c.published = 1 AND c.access <= {$aid} AND c.trash = 0";
 
-				$query .= " FROM #__k2_items as i LEFT JOIN #__k2_categories c ON c.id = i.catid";
-
-				if ($ordering == 'best')
-					$query .= " LEFT JOIN #__k2_rating r ON r.itemID = i.id";
-
-				$query .= " WHERE i.published = 1 AND i.trash = 0 AND c.published = 1 AND c.trash = 0";
-				
-				if(K2_JVERSION=='16'){
-					$query .= " AND i.access IN(".implode(',', $user->authorisedLevels()).") ";
-				}
-				else {
-					$query .=" AND i.access<={$aid} ";
-				}
-				
-				if(K2_JVERSION=='16'){
-					$query .= " AND c.access IN(".implode(',', $user->authorisedLevels()).") ";
-				}
-				else {
-					$query .=" AND c.access<={$aid} ";
-				}
-
-				$query .= " AND ( i.publish_up = ".$db->Quote($nullDate)." OR i.publish_up <= ".$db->Quote($now)." )";
-
-				$query .= " AND ( i.publish_down = ".$db->Quote($nullDate)." OR i.publish_down >= ".$db->Quote($now)." )";
-
-				if(!is_array($itemid)) {
-					$itemid		= preg_split("/[\s,]+/", $itemid);
-				}
-				
-				if (!empty($cid)) {
-				
-					if (is_array($cid)) {
-					
-						if ($params->get('getChildren')) {
-
-							require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
-							$allChildren = array();
-
-							foreach ($cid as $id) {
-								$categories = K2ModelItemlist::getCategoryChilds($id);
-								$categories[] = $id;
-								$categories = @array_unique($categories);
-								$allChildren = @array_merge($allChildren, $categories);
-							}
-
-							$allChildren = @array_unique($allChildren);
-							$sql = @implode(',', $allChildren);
-							$query .= " AND c.id IN ({$sql})";
-
-						} else {
-							$query .= " AND c.id IN(".implode(',', $cid).")";
-						}
-
-					} else {
-
-						if ($params->get('getChildren')) {
-							require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
-							$categories = K2ModelItemlist::getCategoryChilds($cid);
-							$categories[] = $cid;
-							$categories = @array_unique($categories);
-							$sql = @implode(',', $categories);
-							$query .= " AND c.id IN ({$sql})";
-						} else {
-							$query .= " AND c.id={$cid}";
-						}
-					}
-				}
-				
-				if ($params->get('itemFilter') == 'feat')
-					$query .= " AND i.featured = 1";
-				else if ($params->get('itemFilter') == 'hide')
-					$query .= " AND i.featured = 0";
-		
-				if(K2_JVERSION=='16'){
-					if($mainframe->getLanguageFilter()) {
-						$languageTag = JFactory::getLanguage()->getTag();
-						$query .= " AND c.language IN (".$db->Quote($languageTag).", ".$db->Quote('*').") AND i.language IN (".$db->Quote($languageTag).", ".$db->Quote('*').")";
-					}
-				}
+				if (!is_null($cid)) {
+			        if (is_array($cid)) {
+			         if ($params->get('getChildren')) {
+			           require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+			           $allChildren = array();
+			           foreach ($cid as $id) {
+			             $categories = K2ModelItemlist::getCategoryTree($id);
+			             $categories[] = $id;
+			             $categories = @array_unique($categories);
+			             $allChildren = @array_merge($allChildren, $categories);
+			           }
+			           $allChildren = @array_unique($allChildren);
+			           $sql = @implode(',', $allChildren);
+			           $query .= " AND c.id IN ({$sql})";
+			         } else {
+			           $query .= " AND c.id IN(".implode(',', $cid).")";
+			         }
+			       } else {
+			         if ($params->get('getChildren')) {
+			           require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+			           $categories = K2ModelItemlist::getCategoryTree($cid);
+			           $categories[] = $cid;
+			           $categories = @array_unique($categories);
+			           $sql = @implode(',', $categories);
+			           $query .= " AND c.id IN ({$sql})";
+			         } else {
+			           $query .= " AND c.id={$cid}";
+			         }
+			       }
+			     }
 
 				switch ($ordering) {
 
-					case 'date':
-					$orderby = 'i.created ASC';
+			      case 'alpha':
+			        $orderby = 'c.name';
+			        break;
+			      case 'ralpha':
+			        $orderby = 'c.name DESC';
+			        break;
+			      case 'rand':
+			        $orderby = 'RAND()';
+			        break;
+			      case 'order':
+					$orderby = 'c.ordering';
 					break;
 
-					case 'rdate':
-					$orderby = 'i.created DESC';
-					break;
+				  default:
+					$orderby = 'c.ordering';
+			        break;
+			    }
 
-					case 'alpha':
-					$orderby = 'i.title';
-					break;
-
-					case 'ralpha':
-					$orderby = 'i.title DESC';
-					break;
-
-					case 'order':
-					if ($params->get('itemFilter') == 'feat')
-					  $orderby = 'i.featured_ordering';
-					else
-					  $orderby = 'i.ordering';
-					break;
-
-					case 'hits':
-					$orderby = 'i.hits DESC';
-					break;
-
-					case 'rand':
-					$orderby = 'RAND()';
-					break;
-
-					case 'best':
-					$orderby = 'rating DESC';
-					break;
-
-					default:
-					$orderby = 'i.id DESC';
-					break;
-				}
+			    $query .= " ORDER BY ".$orderby;
+			    $db->setQuery($query, 0, $limit);
 		
-				$query .= " ORDER BY ".$orderby;
-				$db->setQuery($query, 0, $limit);
-				$items = $db->loadObjectList();
-
+			    $items = $db->loadObjectList();
+				
 				require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'item.php');
 				$model = new K2ModelItem;
 
 				require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'helpers'.DS.'route.php');
 
 
-				if (count($items)) {
+			    if (count($items)) {
 
-					$k2ImageSource = $params->get('displayImages','k2item');
-
+			      	$k2ImageSource = $params->get('displayImages','k2item');
 					foreach ($items as $item) {
-					
-						//Images
-						if($k2ImageSource == "k2item") {
 
-							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'src'.DS.md5("Image".$item->id).'.jpg'))
-								$item->imageOriginal = 'media/k2/items/src/'.md5("Image".$item->id).'.jpg';
-
-							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_XS.jpg'))
-								$item->imageXSmall = 'media/k2/items/cache/'.md5("Image".$item->id).'_XS.jpg';
+			        //Images
 
 
-							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_S.jpg'))
-								$item->imageSmall = 'media/k2/items/cache/'.md5("Image".$item->id).'_S.jpg';
-
-								
-							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_M.jpg'))
-								$item->imageMedium = 'media/k2/items/cache/'.md5("Image".$item->id).'_M.jpg';
+					if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'categories'.DS.$item->image))
+			            $item->image = 'media/k2/categories/'.$item->image;
 
 
-							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_L.jpg'))
-								$item->imageLarge = 'media/k2/items/cache/'.md5("Image".$item->id).'_L.jpg';
+			        //Read more link
+			        $item->link = urldecode(JRoute::_(K2HelperRoute::getCategoryRoute($item->id.':'.urlencode($item->alias))));
 
 
-							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_XL.jpg'))
-								$item->imageXLarge = 'media/k2/items/cache/'.md5("Image".$item->id).'_XL.jpg';
+
+			        // Item text
+					$item->title = $item->name;
 
 
-							if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_Generic.jpg'))
-								$item->imageGeneric = 'media/k2/items/cache/'.md5("Image".$item->id).'_Generic.jpg';
 
+			        $rows[] = $item;
+			      }
 
-							$image = 'image'.$params->get('itemImageSize');
-							
-							if(isset($item->$image)) {
-								$item->firstimage = $item->$image;
-							} else {
-								$item->firstimage = "";
-							}
+			      return $rows;
 
-						} elseif ($k2ImageSource == "k2content"){
-							$item->firstimage = "";
-						}
-
-						$item->numOfComments = $model->countItemComments($item->id);
-
-						//Read more link
-
-						$item->link = urldecode(JRoute::_(K2HelperRoute::getItemRoute($item->id.':'.urlencode($item->alias), $item->catid.':'.urlencode($item->categoryalias))));
-						
-						// Item text
-						$item->text = $item->introtext;
-						$rows[] = $item;
-					}
-					
-					return $rows;
-				}
-			
+			    }
+				
+				
 			}
+
+			
+
+		  }
+
 		}
-	}	
-}
+	}
