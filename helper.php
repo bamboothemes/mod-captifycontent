@@ -1200,7 +1200,7 @@ if (file_exists($k2file)){
 
 			        // Item text
 					$item->title = $item->name;
-
+					$item->text = false;
 
 
 			        $rows[] = $item;
