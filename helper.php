@@ -102,7 +102,7 @@ if (substr(JVERSION, 0, 3) >= '1.6') {
 
 						$catitem->link = JRoute::_('index.php?option=com_users&view=login&Itemid='.$Itemid);
 						}
-				
+					$catitem->image = "";
 
 					$items[] = $catitem;
 
@@ -1110,7 +1110,7 @@ if (file_exists($k2file)){
 			}
 			
 			if($contentSource == "k2category"){
-				
+		
 				$limit = $params->get('count', 5);
 			    $cid = $params->get('k2catid', NULL);
 			    $ordering = $params->get('orderingK2');
@@ -1179,9 +1179,9 @@ if (file_exists($k2file)){
 
 			    $query .= " ORDER BY ".$orderby;
 			    $db->setQuery($query, 0, $limit);
+			
 		
 			    $items = $db->loadObjectList();
-				
 				require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'item.php');
 				$model = new K2ModelItem;
 
