@@ -455,7 +455,7 @@ class modCCK2ContentHelper {
 	    }
 	}
 	if($contentSource == "k2category"){
-		$limit = $params->get('countcc', 5);
+		$limit = $params->get('count', 5);
 	    $cid = $params->get('k2catid', NULL);
 	    $ordering = $params->get('orderingK2');
 	    $limitstart = JRequest::getInt('limitstart');
