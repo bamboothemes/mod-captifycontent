@@ -252,7 +252,7 @@
 				</fieldset>
 
 				<fieldset name="panelK2" group="panelK2" label="K2 Item Settings">	
-					<field name="k2contentSource" type="radio" default="0" label="K2 Content Source" description="Set this option to select if you want to specify the category that this module should draw it's content from.">
+					<field name="k2contentSource" type="list" default="0" label="K2 Content Source" description="Set this option to select if you want to specify the category that this module should draw it's content from.">
 						<option value="categories">Categories</option>
 						<option value="item">Items</option>
 					</field>	
