@@ -932,7 +932,7 @@ if (file_exists($k2file)){
 
 				$query .= " AND ( i.publish_down = ".$db->Quote($nullDate)." OR i.publish_down >= ".$db->Quote($now)." )";
 				
-				
+
 				// If content source is categories
 				if($params->get('k2contentSource') != 'item'){
 					if (!is_null($cid)) {
@@ -975,10 +975,10 @@ if (file_exists($k2file)){
 				}
 
 
-				if ($params->get('FeaturedItems') == '0')
+				if ($params->get('itemFilter') == 'hide')
 				$query .= " AND i.featured != 1";
 
-				if ($params->get('FeaturedItems') == '2')
+				if ($params->get('itemFilter') == 'feat')
 				$query .= " AND i.featured = 1";
 
 				if ($params->get('videosOnly'))
