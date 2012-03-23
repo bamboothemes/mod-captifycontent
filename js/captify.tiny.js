@@ -42,7 +42,7 @@ jQuery.fn.extend({
 
 			var img = this;
 
-			jQuery(this).load(function() {
+			//jQuery(this).load(function() {
 
 				jQuerythis = img;
 
@@ -286,13 +286,13 @@ jQuery.fn.extend({
 
 				}
 
-			});
+			//});
 
 			//if the image has already loaded (due to being cached), force the load function to be called
 
 			if (this.complete || this.naturalWidth > 0) {
 
-				jQuery(img).trigger('load');
+				//jQuery(img).trigger('load');
 
 			}
 
