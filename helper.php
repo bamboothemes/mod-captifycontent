@@ -518,12 +518,7 @@ if (substr(JVERSION, 0, 3) >= '1.6') {
 }
 
 
-$k2file = JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'comments.php';
 
-if (file_exists($k2file)){
-
-
-	
 	/*********************************************************************************************************************
 	 * 
 	 *  Helper for K2 v2.5.x
@@ -898,5 +893,4 @@ if (file_exists($k2file)){
 
 		  }
 
-		}
-	}
+}
