@@ -85,23 +85,54 @@ require_once (dirname(__FILE__).DS.'helper.php');
 	$displayImages = $params->get('displayImages','k2item');
 	$titleBelow = $params->get('titleBelow','0');
 	$contentSource = $params->get('type','content');
+	
+	
+	if (substr(JVERSION, 0, 3) >= '1.6') {
 
-// Load css into the head
-if($scripts) {
-	if(!$zgf) {
-		if(!$cache) {
-			 $document->addStyleSheet($modbase.'css/captifyContent.css');
-
-			if ($useCaptify == '2') { $document->addScript($modbase . "js/captify.tiny.js");}
+		// Test to see if cache is enabled
+		if ($app->getCfg('caching')) { 
+			$cache = 1;
+		}
+		else {
+			$cache = 0;
 		}
 	}
-}
+	else {
 
-$list = modCaptifycontentHelper::getList($params);
+		// Test to see if cache is enabled
+		if ($mainframe->getCfg('caching')) { 
+			$cache = 1;
+		}
+		else {
+			$cache = 0;
+		}
+	}
+
+	// Load css into the head
+	if($scripts) {
+		if(!$zgf) {
+			if(!$cache) {
+				$document->addStyleSheet($modbase.'css/captifyContent.css');	
+				if ($useCaptify == '2') { $document->addScript($modbase . "js/captify.tiny.js");}
+			}
+		}
+	}
+
+	$k2 = JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_k2'.DS.'admin.k2.php';
 
 
-if (!count($list)) {
-	echo 'Error! Unable to retrieve any Images!';
-	return;
-}
-require(JModuleHelper::getLayoutPath('mod_captifyContent'));
+	if((($contentSource == "k2")||($contentSource == "k2category"))&&(file_exists($k2))) {
+		$list = modCCK2ContentHelper::getList($params);
+
+	} elseif(($contentSource == "content")||($contentSource == "category")||($contentSource == "section")) {
+		$list = modCaptifycontentHelper::getList($params);
+	} else {
+		echo 'K2 is not installed!<br />';
+	}
+
+	if (!count($list)) {
+		echo 'Error! Unable to retrieve any Images!';
+		return;
+	}
+
+	require(JModuleHelper::getLayoutPath('mod_captifyContent'));
