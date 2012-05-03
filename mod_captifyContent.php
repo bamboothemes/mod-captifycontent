@@ -20,10 +20,13 @@ defined('_JEXEC') or die('Restricted access');
 
 	// Import the file / foldersystem
 	jimport( 'joomla.filesystem.file' );
-
+	
+	// Test to see if the default template is a zgf v2 template
+	$app = JFactory::getApplication();
+	
 	// Sets variables so we can check if framework or library is present
 	$jblibrary = JPATH_SITE.DS.'media'.DS.'plg_jblibrary'.DS.'helpers'.DS.'image.php';
-	$framework = JPATH_SITE.DS.'media'.DS.'zengridframework'.DS.'helpers'.DS.'image.php';
+	$framework = JPATH_ROOT.DS.'templates'.DS.$app->getTemplate().DS.'includes'.DS.'config.php';
 	
 	// Checks to see if framework is installed
 	if (file_exists($framework)){ 
