@@ -20,6 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 
 	// Import the file / foldersystem
 	jimport( 'joomla.filesystem.file' );
+	jimport('joomla.filesystem.folder');
 	
 	// Test to see if the default template is a zgf v2 template
 	$app = JFactory::getApplication();
