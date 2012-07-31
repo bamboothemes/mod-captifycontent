@@ -40,8 +40,8 @@
 	        <param name="scripts" type="list" default="head" label="Load CSS?" description="When enabled all relevant css and javascript is loaded via the module or int he case of users who use the Zen Grid Framework - the framework. If you want to disable all css and javascript from loading via this instance of the module disable this option.">
 	            <option value="1">Enable</option>
 	            <option value="0">Disable</option>
-	        </param>	
-	        <param type="panel" panel="panelContent" title="Joomla Content Settings"/>        
+	        </param>
+	        <param type="panel" panel="panelContent" title="Joomla Content Settings"/>
 	        <param name="catid" type="categories" default="" label="Category" description="Select the categories that you would like to display" />
 	        <param name="artid" type="articles" default="" label="Articles" description="Select the articles you would like to display." />
 	        <param name="ordering" type="list" default="rdate" label="Ordering of content" description="Select the order in which the content items should appear.">
@@ -59,11 +59,11 @@
 	            <option value="0">No</option>
 	        </param>
 
-	        <param type="panel" panel="panelK2" title="K2 Item Settings"/>    
+	        <param type="panel" panel="panelK2" title="K2 Item Settings"/>
 			<param name="k2contentSource" type="radio" default="0" label="K2 Content Source" description="Set this option to select if you want to specify the category that this module should draw it's content from.">
 				<option value="categories">Categories</option>
 				<option value="item">Items</option>
-			</param>    
+			</param>
 	        <param name="k2catid" type="categoriesmultiple" default="" label="Filter items by category" description="Select one ore more categories for which you want to filter an items list. Select none to fetch items from all categories." />
 	        <param name="getChildren" type="list" default="0" label="Fetch items from children categories">
 	            <option value="0">No</option>
@@ -72,7 +72,7 @@
 	        <param name="itemid" type="items" default="" label="K2 Items" description="Select the K2 items you would like to display." />
 			<param name="itemFilter" type="list" default="" label="Featured Items" description="Select whether to display all items or only featured">
 				<option value="">Show All Items</option>
-				<option value="feat">Show Only Featured Items</option>			
+				<option value="feat">Show Only Featured Items</option>
 				<option value="hide">Hide Featured Items</option>
 			</param>
 	        <param name="orderingK2" type="list" default="order" label="Ordering" description="Ordering options">
@@ -85,7 +85,7 @@
 	            <option value="hits">Most popular</option>
 	            <option value="best">Highest rated</option>
 	            <option value="rand">Random ordering</option>
-	        </param>		
+	        </param>
 
 	        <param type="panel" panel="panel" title="K2 Image source"/>
 	        <param name="displayImages" type="list" default="k2item" label="K2 Image source" description="Choose to use the K2 item image or the first image in the K2 content.">
@@ -155,7 +155,7 @@
 	    </params>
 
 
-		<config>    
+		<config>
 			<fields name="params" addfieldpath="/modules/mod_captifyContent/fields">
 				<fieldset name="general" group="general" label="General Settings">
 	        		<field name="type" type="list" default="section" label="Image Content source" description="Select whether to display categories or Joomla content items.">
@@ -214,7 +214,7 @@
 						description="Select the articles to use for content filtering"
 						query="SELECT id, title FROM #__content ORDER BY title"
 						key_field="id" value_field="title">
-					</field>		       
+					</field>
 					<field name="filteringspacer11" type="spacer" hr="true" />
 					<field name="author_filtering_type" type="radio" default="1" label="Author Filtering Type" description="Select Inclusive to Include the selcted authors or Exclusive to Exclude the selected authors " >
 						<option value="1">Inclusive</option>
@@ -234,6 +234,7 @@
 						<option value="modified">Modified Date</option>
 						<option value="publish_up">Start Publishing Date</option>
 						<option value="a.publish_down">Finish Publishing Date</option>
+						<option value="RAND()">Random Ordering</option>
 			        </field>
 					<field name="ordering_direction" type="list" default="ASC" label="Ordering Direction" description="Choose to order articles by the above selection option in ascending or descing order." >
 						<option value="DESC">Descending</option>
@@ -248,14 +249,14 @@
 						<option value="1">Include</option>
 						<option value="0">Exclude</option>
 					</field>
-					<field name="c_levels" type="text" default="1" label="Category Depth" description="Specify the number of sub category levels to be included" />				
+					<field name="c_levels" type="text" default="1" label="Category Depth" description="Specify the number of sub category levels to be included" />
 				</fieldset>
 
-				<fieldset name="panelK2" group="panelK2" label="K2 Item Settings">	
+				<fieldset name="panelK2" group="panelK2" label="K2 Item Settings">
 					<field name="k2contentSource" type="list" default="0" label="K2 Content Source" description="Set this option to select if you want to specify the category that this module should draw it's content from.">
 						<option value="categories">Categories</option>
 						<option value="item">Items</option>
-					</field>	
+					</field>
 					<field name="k2catid" type="k2categories" extension="com_k2" multiple="true" size="10" default="" label="Category Filtering" description="PARAMCATEGORYID">
 						<option value="">Select All Categories</option>
 					</field>
@@ -271,9 +272,9 @@
 
 					<field name="itemFilter" type="list" default="" label="Featured Items" description="Select whether to display all items or only featured">
 						<option value="">Show All Items</option>
-						<option value="feat">Show Only Featured Items</option>			
+						<option value="feat">Show Only Featured Items</option>
 						<option value="hide">Hide Featured Items</option>
-					</field>	
+					</field>
 
 					<field name="orderingK2" type="list" default="order" label="Ordering" description="Ordering options">
 						<option value="">Default</option>
@@ -285,7 +286,7 @@
 						<option value="hits">Most popular</option>
 						<option value="best">Highest rated</option>
 						<option value="rand">Random ordering</option>
-					</field>				
+					</field>
 				</fieldset>
 
 				<fieldset name="k2imagesettings" group="k2imagesettings" label="K2 Image source">
