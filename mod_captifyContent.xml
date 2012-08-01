@@ -234,6 +234,7 @@
 						<option value="modified">Modified Date</option>
 						<option value="publish_up">Start Publishing Date</option>
 						<option value="a.publish_down">Finish Publishing Date</option>
+						<option value="rand()">Random</option>
 			        </field>
 					<field name="ordering_direction" type="list" default="ASC" label="Ordering Direction" description="Choose to order articles by the above selection option in ascending or descing order." >
 						<option value="DESC">Descending</option>
