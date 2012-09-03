@@ -18,6 +18,9 @@ class JFormFieldK2categories extends JFormField {
 
 		function getInput(){
 			
+			if(file_exists(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_k2'.DS.'admin.k2.php'))
+		   		{
+			
 			$db = &JFactory::getDBO();
 			$query = 'SELECT id,name FROM #__k2_categories m WHERE published=1 AND trash = 0 ORDER BY parent, ordering';
 			$db->setQuery( $query );
@@ -32,5 +35,5 @@ class JFormFieldK2categories extends JFormField {
 			return JHTML::_('select.genericlist',  $categories, ''.$this->formControl.'[params]['.$this->fieldname.'][]', 'class="inputbox" style="width:90%;"  multiple="multiple" size="5"', 'id', 'title', $this->value, $this->id );
 			
 		}
+	}
 }
-

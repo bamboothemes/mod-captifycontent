@@ -8,6 +8,9 @@ class JFormFieldK2itemslist extends JFormField
 
    protected function getInput()
    {
+   		if(file_exists(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_k2'.DS.'admin.k2.php'))
+		   		{
+		   		
       	$db =& JFactory::getDBO();
 		$size = ( $this->element['size'] ? $this->element['size'] : 5 );
 			$query = 'SELECT id, title FROM #__k2_items WHERE published = 1 
@@ -23,4 +26,5 @@ class JFormFieldK2itemslist extends JFormField
 
 	      return JHTML::_('select.genericlist',  $k2items, ''.$this->formControl.'[params]['.$this->fieldname.'][]',  'class="inputbox" style="width:90%;" multiple="multiple" size="5"', 'id', 'title', $this->value, $this->id);
    	}
+   }
 }
