@@ -20,21 +20,27 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 {
 	/*********************************************************************************************************************
 	 *
-	 *  Helper for Joomla 1.7 +
+	 * Helper for Joomla 1.7 +
 	 *
 	**********************************************************************************************************************/
 
 	jimport('joomla.application.component.model');
 
-	$com_path = JPATH_SITE.DS.'components'.DS.'com_content'.DS;
-	require_once $com_path.'router.php';
-	require_once $com_path.'helpers'.DS.'route.php';
+	$com_path = JPATH_SITE . '/components/com_content';
+	require_once $com_path . '/router.php';
+	require_once $com_path . '/helpers/route.php';
 
 	jimport('joomla.application.component.model');
 
-	JModel::addIncludePath($com_path.DS.'models', 'ContentModel');
+	JModel::addIncludePath($com_path . '/models', 'ContentModel');
 
-	abstract class modCaptifycontentHelper
+	/**
+	 * Content Helper Class
+	 *
+	 * @package  Mod_CaptifyContent
+	 * @since    1.0
+	 */
+	abstract class ModCaptifycontentHelper
 	{
 		public static function getList(&$params)
 		{
@@ -44,8 +50,8 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 
 			if ($type == "category")
 			{
-				//echo $params->get('c_catid','0');
-				$catids = $params->get('c_catid','0');
+				// echo $params->get('c_catid', '0');
+				$catids = $params->get('c_catid', '0');
 				$access = !JComponentHelper::getParams('com_content')->get('show_noauth');
 				$authorised = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'));
 				$categories = JModel::getInstance('Categories', 'ContentModel', array('ignore_request' => true));
@@ -53,6 +59,7 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 				$levels = $params->get('c_levels', 1) ? $params->get('c_levels', 1) : 9999;
 				$categories->setState('filter.published', '1');
 				$categories->setState('filter.access', $access);
+
 				if ($catids && $params->get('c_show_child_category_articles', 0) && (int) $params->get('c_levels', 0) > 0)
 				{
 					$additional_catids = array();
@@ -82,7 +89,7 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 				$items = array();
 				$jcategory = JCategories::getInstance('Content');
 
-				if (is_array($catids)) foreach ( $catids as $catid )
+				if (is_array($catids)) foreach ($catids as $catid)
 				{
 					$catitem = $jcategory->get($catid);
 
@@ -91,13 +98,13 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 						continue;
 					}
 
-					$catitem->slug = $catitem->id.':'.$catitem->alias;
-					$catitem->catslug = $catitem->id ? $catitem->id .':'.$catitem->alias : $catitem->id;
+					$catitem->slug = $catitem->id. ':' . $catitem->alias;
+					$catitem->catslug = $catitem->id ? $catitem->id . ':' . $catitem->alias : $catitem->id;
 
 					if ($access || in_array($catitem->access, $authorised))
 					{
 
-						$catitem->link = JRoute::_(ContentHelperRoute::getCategoryRoute($catitem->id).'&layout=blog');
+						$catitem->link = JRoute::_(ContentHelperRoute::getCategoryRoute($catitem->id) . '&layout=blog');
 					}
 					else
 					{
@@ -111,11 +118,11 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 							$Itemid = $menuitems[0]->id;
 						}
 						else if (JRequest::getInt('Itemid') > 0)
-						{ //use Itemid from requesting page only if there is no existing menu
+						{ // use Itemid from requesting page only if there is no existing menu
 							$Itemid = JRequest::getInt('Itemid');
 						}
 
-						$catitem->link = JRoute::_('index.php?option=com_users&view=login&Itemid='.$Itemid);
+						$catitem->link = JRoute::_('index.php?option=com_users&view=login&Itemid=' . $Itemid);
 					}
 
 					$catitem->image = "";
@@ -205,16 +212,16 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 
 				$items = $articles->getItems();
 
-				foreach ( $items as $item )
+				foreach ($items as $item)
 				{
 
-					$item->slug = $item->id.':'.$item->alias;
-					$item->catslug = $item->catid ? $item->catid .':'.$item->category_alias : $item->catid;
+					$item->slug = $item->id. ':' . $item->alias;
+					$item->catslug = $item->catid ? $item->catid . ':' . $item->category_alias : $item->catid;
 
 					if ($access || in_array($item->access, $authorised))
 					{
 						$item->link = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catslug));
-						$item->catlink = JRoute::_(ContentHelperRoute::getCategoryRoute($item->catslug).'&layout=blog');
+						$item->catlink = JRoute::_(ContentHelperRoute::getCategoryRoute($item->catslug) . '&layout=blog');
 					}
 					else
 					{
@@ -228,11 +235,11 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 							$Itemid = $menuitems[0]->id;
 						} else if (JRequest::getInt('Itemid') > 0)
 						{
-										//use Itemid from requesting page only if there is no existing menu
+										// use Itemid from requesting page only if there is no existing menu
 							$Itemid = JRequest::getInt('Itemid');
 						}
 
-						$item->link = JRoute::_('index.php?option=com_users&view=login&Itemid='.$Itemid);
+						$item->link = JRoute::_('index.php?option=com_users&view=login&Itemid=' . $Itemid);
 					}
 
 					$item->text = $item->introtext;
@@ -248,13 +255,13 @@ else
 
 	/*********************************************************************************************************************
 	 *
-	 *  Helper for Joomla 1.5 +
+	 * Helper for Joomla 1.5 +
 	 *
 	**********************************************************************************************************************/
 
-	require_once (JPATH_SITE.DS.'components'.DS.'com_content'.DS.'helpers'.DS.'route.php');
+	require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
-	class modCaptifycontentHelper
+	class ModCaptifycontentHelper
 	{
 		function getList(&$params)
 		{
@@ -266,14 +273,14 @@ else
 			if ($type == "section")
 			{
 
-				$sectionid 		= $params->get( 'sectionid', '' );
-				$ordering		= $params->get( 'secOrdering' , 'order' );
+				$sectionid 		= $params->get('sectionid', '');
+				$ordering		= $params->get('secOrdering' , 'order');
 
 				$db		=& JFactory::getDBO();
 				$user	=& JFactory::getUser();
 
 				$count	= intval($params->get('count', 20));
-				$contentConfig 	= &JComponentHelper::getParams( 'com_content' );
+				$contentConfig 	= &JComponentHelper::getParams('com_content');
 
 				$access	= !$contentConfig->get('shownoauth');
 				$gid 		= $user->get('aid', 0);
@@ -287,10 +294,10 @@ else
 				$db		=& JFactory::getDBO();
 				$user		=& JFactory::getUser();
 
-				$ordering		= $params->get( 'ordering' , 'order' );
+				$ordering		= $params->get('ordering' , 'order');
 				$count		= intval($params->get('count', 5));
 
-				$contentConfig 	= &JComponentHelper::getParams( 'com_content' );
+				$contentConfig 	= &JComponentHelper::getParams('com_content');
 				$catid		= $params->get('catid');
 				$access		= !$contentConfig->get('shownoauth');
 				$gid 		= $user->get('aid', 0);
@@ -305,13 +312,13 @@ else
 				{
 					if (is_array($sectionid))
 					{
-						JArrayHelper::toInteger( $sectionid );
-						$secCondition = ' AND (a.id=' . implode( ' OR a.id=', $sectionid ) . ')';
+						JArrayHelper::toInteger($sectionid);
+						$secCondition = ' AND (a.id=' . implode(' OR a.id=', $sectionid) . ')';
 					} else
 					{
-						$ids = explode( ',', $sectionid );
-						JArrayHelper::toInteger( $ids );
-						$secCondition = ' AND (a.id=' . implode( ' OR ca.id=', $ids ) . ')';
+						$ids = explode(', ', $sectionid);
+						JArrayHelper::toInteger($ids);
+						$secCondition = ' AND (a.id=' . implode(' OR ca.id=', $ids) . ')';
 					}
 				}
 
@@ -340,16 +347,16 @@ else
 				$query = 'SELECT a.id AS id, a.title AS title,a.description AS description,a.image AS image, COUNT(b.id) as cnt' .
 				' FROM #__sections as a' .
 				' LEFT JOIN #__content as b ON a.id = b.sectionid' .
-				($access ? ' AND b.access <= '.(int) $gid : '') .
-				' AND ( b.publish_up = '.$db->Quote($nullDate).' OR b.publish_up <= '.$db->Quote($now).' )' .
-				' AND ( b.publish_down = '.$db->Quote($nullDate).' OR b.publish_down >= '.$db->Quote($now).' )' .
+				($access ? ' AND b.access <= ' . (int) $gid : '') .
+				' AND (b.publish_up = ' . $db->Quote($nullDate) . ' OR b.publish_up <= ' . $db->Quote($now) . ')' .
+				' AND (b.publish_down = ' . $db->Quote($nullDate) . ' OR b.publish_down >= ' . $db->Quote($now) . ')' .
 				' WHERE a.scope = "content"' .
 				' AND a.published = 1' .
-				($access ? ' AND a.access <= '.(int) $gid : '') .
-				($sectionid ? $secCondition : '').
-				' GROUP BY a.id '.
-				' HAVING COUNT( b.id ) > 0' .
-				' ORDER BY '. $ordering;
+				($access ? ' AND a.access <= ' . (int) $gid : '') .
+				($sectionid ? $secCondition : '') .
+				' GROUP BY a.id ' .
+				' HAVING COUNT(b.id) > 0' .
+				' ORDER BY ' . $ordering;
 
 				$db->setQuery($query, 0, $count);
 				$rows = $db->loadObjectList();
@@ -363,14 +370,14 @@ else
 				{
 					if (is_array($catid))
 					{
-						JArrayHelper::toInteger( $catid );
-						$catCondition = ' AND (a.id=' . implode( ' OR a.id=', $catid ) . ')';
+						JArrayHelper::toInteger($catid);
+						$catCondition = ' AND (a.id=' . implode(' OR a.id=', $catid) . ')';
 					}
 					else
 					{
-						$ids = explode( ',', $catid );
-						JArrayHelper::toInteger( $ids );
-						$catCondition = ' AND (a.id=' . implode( ' OR a.id=', $ids ) . ')';
+						$ids = explode(', ', $catid);
+						JArrayHelper::toInteger($ids);
+						$catCondition = ' AND (a.id=' . implode(' OR a.id=', $ids) . ')';
 					}
 				}
 
@@ -400,14 +407,14 @@ else
 				$query = 'SELECT a.id AS id, a.title AS title,a.image AS image, COUNT(b.id) as cnt' .
 				' FROM #__categories as a' .
 				' LEFT JOIN #__content as b ON b.catid = a.id' .
-				($access ? ' AND b.access <= '.(int) $gid : '') .
-				' AND ( b.publish_up = "'.$nullDate.'" OR b.publish_up <= "'.$now.'" )' .
-				' AND ( b.publish_down = "'.$nullDate.'" OR b.publish_down >= "'.$now.'" )' .
+				($access ? ' AND b.access <= ' . (int) $gid : '') .
+				' AND (b.publish_up = "' . $nullDate. '" OR b.publish_up <= "' . $now. '")' .
+				' AND (b.publish_down = "' . $nullDate. '" OR b.publish_down >= "' . $now. '")' .
 				' WHERE a.published = 1' .
-				($catid ? $catCondition : '').
-				($access ? ' AND a.access <= '.$gid : '') .
-				' GROUP BY a.id '.
-				' ORDER BY '. $ordering;
+				($catid ? $catCondition : '') .
+				($access ? ' AND a.access <= ' . $gid : '') .
+				' GROUP BY a.id ' .
+				' ORDER BY ' . $ordering;
 
 				$db->setQuery($query, 0, $count);
 
@@ -415,7 +422,7 @@ else
 
 				foreach ($rows as $row)
 				{
-					$row->link = JRoute::_(ContentHelperRoute::getCategoryRoute($row->id,'').'&layout=blog');
+					$row->link = JRoute::_(ContentHelperRoute::getCategoryRoute($row->id, '') . '&layout=blog');
 				}
 
 				return $rows;
@@ -433,7 +440,7 @@ else
 				$show_front	= $params->get('show_front', 1);
 				$aid		= $user->get('aid', 0);
 
-				$contentConfig = &JComponentHelper::getParams( 'com_content' );
+				$contentConfig = &JComponentHelper::getParams('com_content');
 				$access		= !$contentConfig->get('show_noauth');
 
 				$nullDate	= $db->getNullDate();
@@ -441,12 +448,12 @@ else
 				$now = $date->toMySQL();
 
 				$where	= 'a.state = 1'
-				. ' AND ( a.publish_up = '.$db->Quote($nullDate).' OR a.publish_up <= '.$db->Quote($now).' )'
-				. ' AND ( a.publish_down = '.$db->Quote($nullDate).' OR a.publish_down >= '.$db->Quote($now).' )'
+				. ' AND (a.publish_up = ' . $db->Quote($nullDate) . ' OR a.publish_up <= ' . $db->Quote($now) . ')'
+				. ' AND (a.publish_down = ' . $db->Quote($nullDate) . ' OR a.publish_down >= ' . $db->Quote($now) . ')'
 				;
 
 				// User Filter
-				switch ($params->get( 'user_id' ))
+				switch ($params->get('user_id'))
 				{
 
 					case 'by_me':
@@ -459,7 +466,7 @@ else
 				}
 
 				// Ordering
-				switch ($params->get( 'ordering' ))
+				switch ($params->get('ordering'))
 				{
 
 					case 'random':
@@ -499,12 +506,12 @@ else
 
 				if ($artid)
 				{
-					if ( is_array( $artid ) )
+					if (is_array($artid))
 					{
-						$artCondition = ' AND (a.id IN ( ' . implode( ',', $artid ) . ') )';
+						$artCondition = ' AND (a.id IN (' . implode(', ', $artid) . '))';
 					} else
 					{
-						$artCondition = ' AND (a.id = '.$artid.')';
+						$artCondition = ' AND (a.id = ' . $artid. ')';
 					}
 				}
 
@@ -512,41 +519,41 @@ else
 				{
 					if (is_array($catid))
 					{
-						JArrayHelper::toInteger( $catid );
-						$catCondition = ' AND (cc.id=' . implode( ' OR cc.id=', $catid ) . ')';
+						JArrayHelper::toInteger($catid);
+						$catCondition = ' AND (cc.id=' . implode(' OR cc.id=', $catid) . ')';
 
 						if ($artid){
-							$catCondition = ' OR (cc.id=' . implode( ' OR cc.id=', $catid ) . ')';
+							$catCondition = ' OR (cc.id=' . implode(' OR cc.id=', $catid) . ')';
 						}
 					}
 					else
 					{
-						$ids = explode( ',', $catid );
-						JArrayHelper::toInteger( $ids );
-						$catCondition = ' AND (cc.id=' . implode( ' OR cc.id=', $ids ) . ')';
+						$ids = explode(', ', $catid);
+						JArrayHelper::toInteger($ids);
+						$catCondition = ' AND (cc.id=' . implode(' OR cc.id=', $ids) . ')';
 
 						if ($artid){
-							$catCondition = ' OR (cc.id=' . implode( ' OR cc.id=', $ids ) . ')';
+							$catCondition = ' OR (cc.id=' . implode(' OR cc.id=', $ids) . ')';
 						}
 					}
 				}
 
 				// Content Items only
 				$query = 'SELECT a.*, ' .
-				' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug,'.
-				' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug'.
+				' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug, ' .
+				' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug' .
 				' FROM #__content AS a' .
 				($show_front == '0' ? ' LEFT JOIN #__content_frontpage AS f ON f.content_id = a.id' : '') .
 				' INNER JOIN #__categories AS cc ON cc.id = a.catid' .
 				' INNER JOIN #__sections AS s ON s.id = a.sectionid' .
-				' WHERE '. $where .' AND s.id > 0' .
-				($access ? ' AND a.access <= ' .(int) $aid. ' AND cc.access <= ' .(int) $aid. ' AND s.access <= ' .(int) $aid : '').
-				($artid ? $artCondition : '').
-				($catid ? $catCondition : '').
-				($show_front == '0' ? ' AND f.content_id IS NULL ' : '').
+				' WHERE ' . $where . ' AND s.id > 0' .
+				($access ? ' AND a.access <= ' . (int) $aid. ' AND cc.access <= ' . (int) $aid. ' AND s.access <= ' . (int) $aid : '') .
+				($artid ? $artCondition : '') .
+				($catid ? $catCondition : '') .
+				($show_front == '0' ? ' AND f.content_id IS NULL ' : '') .
 				' AND s.published = 1' .
 				' AND cc.published = 1' .
-				' ORDER BY '. $ordering;
+				' ORDER BY ' . $ordering;
 
 				$db->setQuery($query, 0, $count);
 				$rows = $db->loadObjectList();
@@ -554,7 +561,7 @@ else
 				$i		= 0;
 				$lists	= array();
 
-				foreach ( $rows as $row )
+				foreach ($rows as $row)
 				{
 					if ($row->access <= $aid)
 					{
@@ -580,22 +587,22 @@ else
 
 /*********************************************************************************************************************
  *
- *  Helper for K2 v2.5.x
+ * Helper for K2 v2.5.x
  *
 **********************************************************************************************************************/
 
 
-class modCCK2ContentHelper
+class ModCCK2ContentHelper
 {
 	function getList(&$params)
 	{
-		require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'helpers'.DS.'route.php');
-		require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'helpers'.DS.'utilities.php');
+		require_once JPATH_SITE . '/components/com_k2/helpers/route.php';
+		require_once JPATH_SITE . '/components/com_k2/helpers/utilities.php';
 
 		$mainframe = &JFactory::getApplication();
 
 		jimport('joomla.filesystem.file');
-		$contentSource = $params->get('type','k2');
+		$contentSource = $params->get('type', 'k2');
 
 		if ($contentSource == "k2")
 		{
@@ -610,7 +617,7 @@ class modCCK2ContentHelper
 			$jnow = &JFactory::getDate();
 			$now = $jnow->toMySQL();
 			$nullDate = $db->getNullDate();
-			$itemid = $params->get('itemid','');
+			$itemid = $params->get('itemid', '');
 
 			$query = "SELECT i.*, c.name AS categoryname,c.id AS categoryid, c.alias AS categoryalias, c.params AS categoryparams";
 
@@ -630,25 +637,25 @@ class modCCK2ContentHelper
 
 			if (K2_JVERSION=='16')
 			{
-				$query .= " AND i.access IN(".implode(',', $user->authorisedLevels()).") ";
+				$query .= " AND i.access IN(" .implode(', ', $user->authorisedLevels()) .") ";
 			}
 			else
 			{
-				$query .=" AND i.access<={$aid} ";
+				$query .= " AND i.access<={$aid} ";
 			}
 
 			if (K2_JVERSION=='16')
 			{
-				$query .= " AND c.access IN(".implode(',', $user->authorisedLevels()).") ";
+				$query .= " AND c.access IN(" .implode(', ', $user->authorisedLevels()) .") ";
 			}
 			else
 			{
-				$query .=" AND c.access<={$aid} ";
+				$query .= " AND c.access<={$aid} ";
 			}
 
-			$query .= " AND ( i.publish_up = ".$db->Quote($nullDate)." OR i.publish_up <= ".$db->Quote($now)." )";
+			$query .= " AND (i.publish_up = " . $db->Quote($nullDate) ." OR i.publish_up <= " . $db->Quote($now) .")";
 
-			$query .= " AND ( i.publish_down = ".$db->Quote($nullDate)." OR i.publish_down >= ".$db->Quote($now)." )";
+			$query .= " AND (i.publish_down = " . $db->Quote($nullDate) ." OR i.publish_down >= " . $db->Quote($now) .")";
 
 
 			// If content source is categories
@@ -660,16 +667,16 @@ class modCCK2ContentHelper
 					{
 						if ($params->get('getChildren'))
 						{
-							require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+							require_once JPATH_SITE . '/components/com_k2/models/itemlist.php';
 							$categories = K2ModelItemlist::getCategoryTree($cid);
-							$sql = @implode(',', $categories);
+							$sql = @implode(', ', $categories);
 							$query .= " AND i.catid IN ({$sql})";
 
 						}
 						else
 						{
 							JArrayHelper::toInteger($cid);
-							$query .= " AND i.catid IN(".implode(',', $cid).")";
+							$query .= " AND i.catid IN(" .implode(', ', $cid) .")";
 						}
 
 					}
@@ -677,14 +684,14 @@ class modCCK2ContentHelper
 					{
 						if ($params->get('getChildren'))
 						{
-							require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+							require_once JPATH_SITE . '/components/com_k2/models/itemlist.php';
 							$categories = K2ModelItemlist::getCategoryTree($cid);
-							$sql = @implode(',', $categories);
+							$sql = @implode(', ', $categories);
 							$query .= " AND i.catid IN ({$sql})";
 						}
 						else
 						{
-							$query .= " AND i.catid=".(int)$cid;
+							$query .= " AND i.catid= " . (int)$cid;
 						}
 
 					}
@@ -696,12 +703,12 @@ class modCCK2ContentHelper
 			{
 				if (is_array($itemid))
 				{
-					JArrayHelper::toInteger( $itemid );
-					$query .= ' AND (i.id=' . implode( ' OR i.id=', $itemid ) . ')';
+					JArrayHelper::toInteger($itemid);
+					$query .= ' AND (i.id=' . implode(' OR i.id=', $itemid) . ')';
 				}
 				else
 				{
-					$query .= ' AND (i.id=' . $itemid  . ')';
+					$query .= ' AND (i.id=' . $itemid . ')';
 				}
 			}
 
@@ -731,7 +738,7 @@ class modCCK2ContentHelper
 				if ($mainframe->getLanguageFilter())
 				{
 					$languageTag = JFactory::getLanguage()->getTag();
-					$query .= " AND c.language IN (".$db->Quote($languageTag).", ".$db->Quote('*').") AND i.language IN (".$db->Quote($languageTag).", ".$db->Quote('*').")";
+					$query .= " AND c.language IN (" . $db->Quote($languageTag) .", " . $db->Quote('*') .") AND i.language IN (" . $db->Quote($languageTag) .", " . $db->Quote('*') .")";
 				}
 			}
 
@@ -785,49 +792,49 @@ class modCCK2ContentHelper
 			$db->setQuery($query, 0, $limit);
 			$items = $db->loadObjectList();
 
-			require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'item.php');
+			require_once JPATH_SITE . '/components/com_k2/models/item.php';
 			$model = new K2ModelItem;
 
-			require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'helpers'.DS.'route.php');
+			require_once JPATH_SITE . '/components/com_k2/helpers/route.php';
 
 
 			if (count($items))
 			{
-				$k2ImageSource = $params->get('displayImages','k2item');
+				$k2ImageSource = $params->get('displayImages', 'k2item');
 
 				foreach ($items as $item)
 				{
-					//Images
+					// Images
 					if ($k2ImageSource == "k2item")
 					{
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'src'.DS.md5("Image".$item->id).'.jpg'))
-							$item->imageOriginal = 'media/k2/items/src/'.md5("Image".$item->id).'.jpg';
+						if (JFile::exists(JPATH_SITE . '/media/k2/items/src/' . md5("Image" . $item->id) . ' .jpg'))
+							$item->imageOriginal = 'media/k2/items/src/' .md5("Image" . $item->id) . ' .jpg';
 
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_XS.jpg'))
-							$item->imageXSmall = 'media/k2/items/cache/'.md5("Image".$item->id).'_XS.jpg';
-
-
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_S.jpg'))
-							$item->imageSmall = 'media/k2/items/cache/'.md5("Image".$item->id).'_S.jpg';
+						if (JFile::exists(JPATH_SITE . '/media/k2/items/cache/' . md5("Image" . $item->id) . '_XS.jpg'))
+							$item->imageXSmall = 'media/k2/items/cache/' .md5("Image" . $item->id) . '_XS.jpg';
 
 
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_M.jpg'))
-							$item->imageMedium = 'media/k2/items/cache/'.md5("Image".$item->id).'_M.jpg';
+						if (JFile::exists(JPATH_SITE . '/media/k2/items/cache/' . md5("Image" . $item->id) . '_S.jpg'))
+							$item->imageSmall = 'media/k2/items/cache/' .md5("Image" . $item->id) . '_S.jpg';
 
 
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_L.jpg'))
-							$item->imageLarge = 'media/k2/items/cache/'.md5("Image".$item->id).'_L.jpg';
+						if (JFile::exists(JPATH_SITE . '/media/k2/items/cache/' . md5("Image" . $item->id) . '_M.jpg'))
+							$item->imageMedium = 'media/k2/items/cache/' .md5("Image" . $item->id) . '_M.jpg';
 
 
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_XL.jpg'))
-							$item->imageXLarge = 'media/k2/items/cache/'.md5("Image".$item->id).'_XL.jpg';
+						if (JFile::exists(JPATH_SITE . '/media/k2/items/cache/' . md5("Image" . $item->id) . '_L.jpg'))
+							$item->imageLarge = 'media/k2/items/cache/' .md5("Image" . $item->id) . '_L.jpg';
 
 
-						if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'items'.DS.'cache'.DS.md5("Image".$item->id).'_Generic.jpg'))
-							$item->imageGeneric = 'media/k2/items/cache/'.md5("Image".$item->id).'_Generic.jpg';
+						if (JFile::exists(JPATH_SITE . '/media/k2/items/cache/' . md5("Image" . $item->id) . '_XL.jpg'))
+							$item->imageXLarge = 'media/k2/items/cache/' .md5("Image" . $item->id) . '_XL.jpg';
 
 
-						$image = 'image'.$params->get('itemImageSize');
+						if (JFile::exists(JPATH_SITE . '/media/k2/items/cache/' . md5("Image" . $item->id) . '_Generic.jpg'))
+							$item->imageGeneric = 'media/k2/items/cache/' .md5("Image" . $item->id) . '_Generic.jpg';
+
+
+						$image = 'image' . $params->get('itemImageSize');
 
 						if (isset($item->$image))
 						{
@@ -846,9 +853,9 @@ class modCCK2ContentHelper
 
 					$item->numOfComments = $model->countItemComments($item->id);
 
-					//Read more link
+					// Read more link
 
-					$item->link = urldecode(JRoute::_(K2HelperRoute::getItemRoute($item->id.':'.urlencode($item->alias), $item->catid.':'.urlencode($item->categoryalias))));
+					$item->link = urldecode(JRoute::_(K2HelperRoute::getItemRoute($item->id. ':' . urlencode($item->alias), $item->catid . ':' . urlencode($item->categoryalias))));
 
 					// Item text
 					$item->text = $item->introtext;
@@ -871,7 +878,7 @@ class modCCK2ContentHelper
 			$now = $jnow->toMySQL();
 			$nullDate = $db->getNullDate();
 
-		    // Fix some differences between J1.5 and J1.7
+			// Fix some differences between J1.5 and J1.7
 			$version = new JVersion();
 			$version = (float)$version->RELEASE;
 			if ($version >= 1.7)
@@ -900,7 +907,7 @@ class modCCK2ContentHelper
 				{
 					if ($params->get('getChildren'))
 					{
-						require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+						require_once JPATH_SITE . '/components/com_k2/models/itemlist.php';
 						$allChildren = array();
 
 						foreach ($cid as $id)
@@ -911,23 +918,23 @@ class modCCK2ContentHelper
 							$allChildren = @array_merge($allChildren, $categories);
 						}
 						$allChildren = @array_unique($allChildren);
-						$sql = @implode(',', $allChildren);
+						$sql = @implode(', ', $allChildren);
 						$query .= " AND c.id IN ({$sql})";
 					}
 					else
 					{
-						$query .= " AND c.id IN(".implode(',', $cid).")";
+						$query .= " AND c.id IN(" .implode(', ', $cid) .")";
 					}
 				}
 				else
 				{
 					if ($params->get('getChildren'))
 					{
-						require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'itemlist.php');
+						require_once JPATH_SITE . '/components/com_k2/models/itemlist.php';
 						$categories = K2ModelItemlist::getCategoryTree($cid);
 						$categories[] = $cid;
 						$categories = @array_unique($categories);
-						$sql = @implode(',', $categories);
+						$sql = @implode(', ', $categories);
 						$query .= " AND c.id IN ({$sql})";
 					}
 					else
@@ -960,41 +967,38 @@ class modCCK2ContentHelper
 					break;
 			}
 
-			$query .= " ORDER BY ".$orderby;
+			$query .= " ORDER BY " . $orderby;
 			$db->setQuery($query, 0, $limit);
 
-
 			$items = $db->loadObjectList();
-			require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'models'.DS.'item.php');
+			require_once JPATH_SITE . '/components/com_k2/models/item.php';
 			$model = new K2ModelItem;
 
-			require_once (JPATH_SITE.DS.'components'.DS.'com_k2'.DS.'helpers'.DS.'route.php');
+			require_once JPATH_SITE . '/components/com_k2/helpers/route.php';
 
 			if (count($items))
 			{
 
-				$k2ImageSource = $params->get('displayImages','k2item');
+				$k2ImageSource = $params->get('displayImages', 'k2item');
 				foreach ($items as $item)
 				{
 
-			        //Images
-					if (JFile::exists(JPATH_SITE.DS.'media'.DS.'k2'.DS.'categories'.DS.$item->image))
+				// Images
+					if (JFile::exists(JPATH_SITE . '/media/k2/categories/' . $item->image))
 					{
-						$item->image = 'media/k2/categories/'.$item->image;
+						$item->image = 'media/k2/categories/' . $item->image;
 					}
 					else
 					{
 						$item->image = "";
 					}
 
-
-					//Read more link
-					$item->link = urldecode(JRoute::_(K2HelperRoute::getCategoryRoute($item->id.':'.urlencode($item->alias))));
+					// Read more link
+					$item->link = urldecode(JRoute::_(K2HelperRoute::getCategoryRoute($item->id . ':' . urlencode($item->alias))));
 
 					// Item text
 					$item->title = $item->name;
 					$item->description = $item->description;
-
 
 					$rows[] = $item;
 				}
