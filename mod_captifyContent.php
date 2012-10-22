@@ -21,28 +21,28 @@ defined('_JEXEC') or die('Restricted access');
 	// Import the file / foldersystem
 	jimport( 'joomla.filesystem.file' );
 	jimport('joomla.filesystem.folder');
-	
+
 	// Test to see if the default template is a zgf v2 template
 	$app = JFactory::getApplication();
-	
+
 	// Sets variables so we can check if framework or library is present
 	$jblibrary = JPATH_SITE.DS.'media'.DS.'plg_jblibrary'.DS.'helpers'.DS.'image.php';
 	$framework = JPATH_ROOT.DS.'templates'.DS.$app->getTemplate().DS.'includes'.DS.'config.php';
-	
+
 	// Checks to see if framework is installed
-	if (file_exists($framework)){ 
-		require_once($framework); 
+	if (file_exists($framework)){
+		require_once($framework);
 		$zgf = 1;
 		$library = JURI::base(true).'/media/zengridframework/';
-	} 
-	
+	}
+
 	// Checks to see if JB Library is installed
-	elseif (file_exists($jblibrary)){ 
+	elseif (file_exists($jblibrary)){
 		require_once($jblibrary);
 		$zgf = 0;
 		$library = JURI::base(true).'/media/plg_jblibrary/';
 	}
-	
+
 	// Else throw an error to let the user know
 	else {
 	echo '<div style="font-size:12px;font-family: helvetica neue, arial, sans serif;width:600px;margin:0 auto;background: #f9f9f9;border:1px solid #ddd ;margin-top:100px;padding:40px"><h3>Ooops. It looks like JbLibrary plugin or the Zen Grid Framework plugin is not installed!</h3> <br />Please install it and ensure that you have enabled the plugin by navigating to extensions > plugin manager. <br /><br />JB Library is a free Joomla extension that you can download directly from the <a href="http://www.joomlabamboo.com/joomla-extensions/jb-library-plugin-a-free-joomla-jquery-plugin">Joomla Bamboo website</a>.</div>';
@@ -52,7 +52,7 @@ defined('_JEXEC') or die('Restricted access');
 // Include the syndicate functions only once
 require_once (dirname(__FILE__).DS.'helper.php');
 
-	$document =& JFactory::getDocument();
+	$document = JFactory::getDocument();
 
 	$modbase = JURI::base(true).'/modules/mod_captifyContent/';
 	$module_id = $module->id;
@@ -89,12 +89,12 @@ require_once (dirname(__FILE__).DS.'helper.php');
 	$displayImages = $params->get('displayImages','k2item');
 	$titleBelow = $params->get('titleBelow','0');
 	$contentSource = $params->get('type','content');
-	
-	
+
+
 	if (substr(JVERSION, 0, 3) >= '1.6') {
 
 		// Test to see if cache is enabled
-		if ($app->getCfg('caching')) { 
+		if ($app->getCfg('caching')) {
 			$cache = 1;
 		}
 		else {
@@ -104,7 +104,7 @@ require_once (dirname(__FILE__).DS.'helper.php');
 	else {
 
 		// Test to see if cache is enabled
-		if ($mainframe->getCfg('caching')) { 
+		if ($mainframe->getCfg('caching')) {
 			$cache = 1;
 		}
 		else {
@@ -116,7 +116,7 @@ require_once (dirname(__FILE__).DS.'helper.php');
 	if($scripts) {
 		if(!$zgf) {
 			if(!$cache) {
-				$document->addStyleSheet($modbase.'css/captifyContent.css');	
+				$document->addStyleSheet($modbase.'css/captifyContent.css');
 				if ($useCaptify == '2') { $document->addScript($modbase . "js/captify.tiny.js");}
 			}
 		}
@@ -134,7 +134,7 @@ require_once (dirname(__FILE__).DS.'helper.php');
 		echo 'K2 is not installed!<br />';
 	}
 
-	if (!count($list)) {
+	if (!isset($list) || !count($list)) {
 		echo 'Error! Unable to retrieve any Images!';
 		return;
 	}
