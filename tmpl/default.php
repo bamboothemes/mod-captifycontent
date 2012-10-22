@@ -1,22 +1,33 @@
-<?php // no direct access
+<?php
+/**
+ * @package     ##package##
+ * @subpackage  ##subpackage##
+ *
+ * @copyright   ##copyright##
+ * @license     ##license##
+ */
+
+// No direct access
 
 defined('_JEXEC') or die('Restricted access');
 
 if($scripts) {
 	if(!$zgf) {
 		if($cache) {?>
-			<link rel="stylesheet" href="<?php echo $modbase?>css/captifyContent.css" type="text/css" />
+<link rel="stylesheet"
+	href="<?php echo $modbase?>css/captifyContent.css" type="text/css" />
 
-			<?php if($useCaptify == '2') { ?>
-				<script type="text/javascript" src="<?php echo $modbase?>js/captify.tiny.js"></script>
-			<?php }
+<?php if($useCaptify == '2') { ?>
+<script
+	type="text/javascript" src="<?php echo $modbase?>js/captify.tiny.js"></script>
+<?php }
 		}
 	}
 }
 
 if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) {?>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	<!--//--><![CDATA[//><!--
 	jQuery.noConflict();
 	jQuery(document).ready(function(){
@@ -71,7 +82,7 @@ if ($fadeEffect) { ?>
 		});
 	//--><!]]>
 	</script>
-	<?php }
+<?php }
 
 $numMB = sizeof($list);
 $imageNumber = 0;
@@ -79,73 +90,73 @@ $startDiv = 0;
 $firstImage = "";
 
 if ($contentSource == "category" or $contentSource == "k2category") { ?>
-	<div>
-		<div id="captifyContent<?php echo $module_id ?>" class="captifyContent cc<?php echo $background?>">
-			<?php
-			foreach ($list as $item) :
-			$html= $item->description;
-			$html .= "alt='...' title='...' />";
-			$pattern = '/<img[^>]+src[\\s=\'"]';
-			$pattern .= '+([^"\'>\\s]+)/is';
+<div>
+	<div id="captifyContent<?php echo $module_id ?>"
+		class="captifyContent cc<?php echo $background?>">
+		<?php
+		foreach ($list as $item) :
+		$html= $item->description;
+		$html .= "alt='...' title='...' />";
+		$pattern = '/<img[^>]+src[\\s=\'"]';
+		$pattern .= '+([^"\'>\\s]+)/is';
 
-			if(preg_match(
+		if(preg_match(
 				$pattern,
 				$html,
 				$match))
 				$item->image = "$match[1]";
 				$sectionImage = $item->image;
 
-			if (!($sectionImage == "")) :
+				if (!($sectionImage == "")) :
 				$imageNumber++;
 				$imgRightMargin = ($imageNumber % $imagesPerRow) ? $rightMargin.'px' : '0px';
 				$rowFlag = ($imageNumber % $imagesPerRow) ? 0 : 1;
 
-			if (($imageNumber == 1) or ($startDiv)) {
+				if (($imageNumber == 1) or ($startDiv)) {
 				$startDiv = 0;
 
-			?>
+				?>
 
-			<div class="ccRow">
-	<?php }?>
-				<div class="ccItem" style="margin-right:<?php echo $imgRightMargin ?>; margin-bottom:<?php echo $bottomMargin ?>px;">
-					<div class="viewport">
-						<a href="<?php echo $item->link;?>">
-							<?php if (!($transition == "slide" and $position == "bottom")) :?><span class="<?php echo $background ?>"><?php echo $item->title;?></span><?php endif;?>
-								<?php if($type == "category") {?>
-									<img src="<?php echo resizeImageHelper::getResizedImage('/'.$item->image, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title;?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
+		<div class="ccRow">
+			<?php }?>
+			<div class="ccItem" style="margin-right:<?php echo $imgRightMargin ?>; margin-bottom:<?php echo $bottomMargin ?>px;">
+				<div class="viewport">
+					<a href="<?php echo $item->link;?>"> <?php if (!($transition == "slide" and $position == "bottom")) :?><span
+						class="<?php echo $background ?>"><?php echo $item->title;?> </span>
+						<?php endif;?> <?php if($type == "category") {?> <img src="<?php echo resizeImageHelper::getResizedImage('/'.$item->image, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title;?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
 
-									<?php }else{?>
-
-									<img src="<?php echo resizeImageHelper::getResizedImage('/'.$item->image, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title;?>"  <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?>/>
-									<?php }?>
-									<?php if ($transition == "slide" and $position == "bottom") :?><span class="<?php echo $background ?> bottom"><?php echo $item->title;?></span><?php endif;?>
-						</a>
-					</div>
+						<?php }else{?> <img src="<?php echo resizeImageHelper::getResizedImage('/'.$item->image, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title;?>"  <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?>/>
+						<?php }?> <?php if ($transition == "slide" and $position == "bottom") :?><span
+						class="<?php echo $background ?> bottom"><?php echo $item->title;?>
+					</span> <?php endif;?>
+					</a>
+				</div>
 
 				<?php if($titleBelow) {?>
-					<a class="captifyTitle" href="<?php echo $item->link;?>">
-						<?php echo $item->title;?>
-					</a>
+				<a class="captifyTitle" href="<?php echo $item->link;?>"> <?php echo $item->title;?>
+				</a>
 				<?php }?>
 			</div>
 			<?php
-				if (($imageNumber == $numMB) or ($rowFlag))
-					{$startDiv = 1; ?>
-				</div>
-				<div class="ccClear"></div>
-			<?php }?>
-	<?php endif; ?>
-	<?php endforeach; ?>
+			if (($imageNumber == $numMB) or ($rowFlag))
+			{
+$startDiv = 1; ?>
+		</div>
+		<div class="ccClear"></div>
+		<?php }?>
+		<?php endif; ?>
+		<?php endforeach; ?>
 	</div>
 </div>
 
 <?php }
 elseif ($contentSource == "content" or $contentSource == "k2") {?>
 <div>
-	<div id="captifyContent<?php echo $module_id ?>" class="captifyContent cc<?php echo $background?>">
+	<div id="captifyContent<?php echo $module_id ?>"
+		class="captifyContent cc<?php echo $background?>">
 		<?php
-			foreach ($list as $item) :
-				if($type == "k2" and $displayImages == "k2item") {
+		foreach ($list as $item) :
+		if($type == "k2" and $displayImages == "k2item") {
 					$firstImage = $item->firstimage;
 				}
 				else
@@ -155,7 +166,7 @@ elseif ($contentSource == "content" or $contentSource == "k2") {?>
 					$pattern = '/<img[^>]+src[\\s=\'"]';
 					$pattern .= '+([^"\'>\\s]+)/is';
 
-				if(preg_match(
+					if(preg_match(
 					$pattern,
 					$html,
 					$match))
@@ -168,33 +179,34 @@ elseif ($contentSource == "content" or $contentSource == "k2") {?>
 
 					if (($imageNumber == 1) or ($startDiv)) {
 						$startDiv = 0;
-				?>
-	<div class="ccRow">
-	<?php }?>
-		<div class="ccItem" style="margin-right:<?php echo $imgRightMargin ?>; margin-bottom:<?php echo $bottomMargin ?>px;width: <?php echo $image_width ?>px">
-			<div class="viewport">
-				<a href="<?php echo $item->link; ?>">
-					<?php if (!($transition == "slide" and $position == "bottom")) :?><span class="<?php echo $background ?>"><?php echo $item->title;?></span><?php endif;?>
-						<img src="<?php echo resizeImageHelper::getResizedImage('/'.$firstImage, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title; ?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
-					<?php if ($transition == "slide" and $position == "bottom") :?><span class="<?php echo $background ?> bottom"><?php echo $item->title;?></span><?php endif;?>
-				</a>
-			</div>
-
-			<?php if($titleBelow) {?>
-			<a class="captifyTitle" href="<?php echo $item->link;?>">
-				<?php echo $item->title;?>
-			</a>
+						?>
+		<div class="ccRow">
 			<?php }?>
-</div>
-<?php
-if (($imageNumber == $numMB) or ($rowFlag)){
+			<div class="ccItem" style="margin-right:<?php echo $imgRightMargin ?>; margin-bottom:<?php echo $bottomMargin ?>px;width: <?php echo $image_width ?>px">
+				<div class="viewport">
+					<a href="<?php echo $item->link; ?>"> <?php if (!($transition == "slide" and $position == "bottom")) :?><span
+						class="<?php echo $background ?>"><?php echo $item->title;?> </span>
+						<?php endif;?> <img src="<?php echo resizeImageHelper::getResizedImage('/'.$firstImage, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title; ?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
+						<?php if ($transition == "slide" and $position == "bottom") :?><span
+						class="<?php echo $background ?> bottom"><?php echo $item->title;?>
+					</span> <?php endif;?>
+					</a>
+				</div>
+
+				<?php if($titleBelow) {?>
+				<a class="captifyTitle" href="<?php echo $item->link;?>"> <?php echo $item->title;?>
+				</a>
+				<?php }?>
+			</div>
+			<?php
+			if (($imageNumber == $numMB) or ($rowFlag)){
 	$startDiv = 1; ?>
+		</div>
+		<div class="ccClear"></div>
+		<?php }?>
+		<?php } ?>
+		<?php endforeach; ?>
 	</div>
-	<div class="ccClear"></div>
-<?php }?>
-<?php } ?>
-<?php endforeach; ?>
-</div>
 </div>
 <?php } ?>
 <div class="clear"></div>

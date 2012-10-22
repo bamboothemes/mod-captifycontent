@@ -16,7 +16,7 @@ class JElementItems extends JElement
 
    function fetchElement($name, $value, &$node, $control_name)
    {
-		if(file_exists(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_k2'.DS.'admin.k2.php'))
+		if(file_exists(JPATH_SITE . '/administrator/components/com_k2/admin.k2.php'))
 		{
 			$db = &JFactory::getDBO();
 			$jnow = &JFactory::getDate();

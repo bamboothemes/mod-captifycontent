@@ -1,17 +1,17 @@
 <?php
 
 /**
-* @version    $Id: helper.php 10616 2008-08-06 11:06:39Z hackwar $
-* @package    Joomla
-* @copyright  Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
-* @license    GNU/GPL, see LICENSE.php
-*
-* Joomla! is free software. This version may have been modified pursuant
-* to the GNU General Public License, and as distributed it includes or
-* is derivative of works licensed under the GNU General Public License or
-* other free or open source software licenses.
-* See COPYRIGHT.php for copyright notices and details.
-*/
+ * @version    $Id: helper.php 10616 2008-08-06 11:06:39Z hackwar $
+ * @package    Joomla
+ * @copyright  Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
+ * @license    GNU/GPL, see LICENSE.php
+ *
+ * Joomla! is free software. This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
+ * See COPYRIGHT.php for copyright notices and details.
+ */
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
@@ -20,8 +20,8 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 {
 	/*********************************************************************************************************************
 	 *
-	 * Helper for Joomla 1.7 +
-	 *
+	* Helper for Joomla 1.7 +
+	*
 	**********************************************************************************************************************/
 
 	jimport('joomla.application.component.model');
@@ -39,7 +39,7 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 	 *
 	 * @package  Mod_CaptifyContent
 	 * @since    1.0
-	 */
+	*/
 	abstract class ModCaptifycontentHelper
 	{
 		public static function getList(&$params)
@@ -140,12 +140,12 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 				$articles->setState('params', $appParams);
 				$artids		= $params->get('artid');
 				$show_front	= $params->get('show_front', 1);
-							// Set the filters based on the module params
+				// Set the filters based on the module params
 				$articles->setState('list.start', 0);
 				$articles->setState('list.limit', (int) $params->get('count', 5));
 				$articles->setState('filter.published', 1);
 
-							// Access filter
+				// Access filter
 				$access = !JComponentHelper::getParams('com_content')->get('show_noauth');
 				$authorised = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'));
 				$articles->setState('filter.access', $access);
@@ -158,7 +158,7 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 				{
 					if ($params->get('show_child_category_articles', 0) && (int) $params->get('levels', 0) > 0)
 					{
-									// Get an instance of the generic categories model
+						// Get an instance of the generic categories model
 						$categories = JModel::getInstance('Categories', 'ContentModel', array('ignore_request' => true));
 						$categories->setState('params', $appParams);
 						$levels = $params->get('levels', 1) ? $params->get('levels', 1) : 9999;
@@ -196,11 +196,11 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 					$articles->setState('filter.article_id', $artids);
 					$articles->setState('filter.article_id.include', $params->get('article_filtering_type', 1));
 				}
-							// Ordering
+				// Ordering
 				$articles->setState('list.ordering', $params->get('ordering', 'a.ordering'));
 				$articles->setState('list.direction', $params->get('ordering_direction', 'ASC'));
 
-							// New Parameters
+				// New Parameters
 				$articles->setState('filter.featured', $params->get('show_front', 'show'));
 				$articles->setState('filter.author_id', $params->get('created_by', ""));
 				$articles->setState('filter.author_id.include', $params->get('author_filtering_type', 1));
@@ -225,7 +225,7 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 					}
 					else
 					{
-									// Angie Fixed Routing
+						// Angie Fixed Routing
 						$app	= JFactory::getApplication();
 						$menu	= $app->getMenu();
 						$menuitems	= $menu->getItems('link', 'index.php?option=com_users&view=login');
@@ -235,7 +235,7 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 							$Itemid = $menuitems[0]->id;
 						} else if (JRequest::getInt('Itemid') > 0)
 						{
-										// use Itemid from requesting page only if there is no existing menu
+							// use Itemid from requesting page only if there is no existing menu
 							$Itemid = JRequest::getInt('Itemid');
 						}
 
@@ -255,8 +255,8 @@ else
 
 	/*********************************************************************************************************************
 	 *
-	 * Helper for Joomla 1.5 +
-	 *
+	* Helper for Joomla 1.5 +
+	*
 	**********************************************************************************************************************/
 
 	require_once JPATH_SITE . '/components/com_content/helpers/route.php';
@@ -326,37 +326,37 @@ else
 				{
 
 					case 'random':
-					$ordering = 'RAND()';
-					break;
+						$ordering = 'RAND()';
+						break;
 
 					case 'alpha':
-					$ordering = 'a.title';
-					break;
+						$ordering = 'a.title';
+						break;
 
 					case 'ralpha':
-					$ordering = 'a.title DESC';
-					break;
+						$ordering = 'a.title DESC';
+						break;
 
 					case 'order':
 
 					default:
-					$ordering = 'a.ordering';
-					break;
+						$ordering = 'a.ordering';
+						break;
 				}
 
 				$query = 'SELECT a.id AS id, a.title AS title,a.description AS description,a.image AS image, COUNT(b.id) as cnt' .
-				' FROM #__sections as a' .
-				' LEFT JOIN #__content as b ON a.id = b.sectionid' .
-				($access ? ' AND b.access <= ' . (int) $gid : '') .
-				' AND (b.publish_up = ' . $db->Quote($nullDate) . ' OR b.publish_up <= ' . $db->Quote($now) . ')' .
-				' AND (b.publish_down = ' . $db->Quote($nullDate) . ' OR b.publish_down >= ' . $db->Quote($now) . ')' .
-				' WHERE a.scope = "content"' .
-				' AND a.published = 1' .
-				($access ? ' AND a.access <= ' . (int) $gid : '') .
-				($sectionid ? $secCondition : '') .
-				' GROUP BY a.id ' .
-				' HAVING COUNT(b.id) > 0' .
-				' ORDER BY ' . $ordering;
+						' FROM #__sections as a' .
+						' LEFT JOIN #__content as b ON a.id = b.sectionid' .
+						($access ? ' AND b.access <= ' . (int) $gid : '') .
+						' AND (b.publish_up = ' . $db->Quote($nullDate) . ' OR b.publish_up <= ' . $db->Quote($now) . ')' .
+						' AND (b.publish_down = ' . $db->Quote($nullDate) . ' OR b.publish_down >= ' . $db->Quote($now) . ')' .
+						' WHERE a.scope = "content"' .
+						' AND a.published = 1' .
+						($access ? ' AND a.access <= ' . (int) $gid : '') .
+						($sectionid ? $secCondition : '') .
+						' GROUP BY a.id ' .
+						' HAVING COUNT(b.id) > 0' .
+						' ORDER BY ' . $ordering;
 
 				$db->setQuery($query, 0, $count);
 				$rows = $db->loadObjectList();
@@ -405,16 +405,16 @@ else
 
 				// Query Sections table for all Categories that match Section ID
 				$query = 'SELECT a.id AS id, a.title AS title,a.image AS image, COUNT(b.id) as cnt' .
-				' FROM #__categories as a' .
-				' LEFT JOIN #__content as b ON b.catid = a.id' .
-				($access ? ' AND b.access <= ' . (int) $gid : '') .
-				' AND (b.publish_up = "' . $nullDate. '" OR b.publish_up <= "' . $now. '")' .
-				' AND (b.publish_down = "' . $nullDate. '" OR b.publish_down >= "' . $now. '")' .
-				' WHERE a.published = 1' .
-				($catid ? $catCondition : '') .
-				($access ? ' AND a.access <= ' . $gid : '') .
-				' GROUP BY a.id ' .
-				' ORDER BY ' . $ordering;
+						' FROM #__categories as a' .
+						' LEFT JOIN #__content as b ON b.catid = a.id' .
+						($access ? ' AND b.access <= ' . (int) $gid : '') .
+						' AND (b.publish_up = "' . $nullDate. '" OR b.publish_up <= "' . $now. '")' .
+						' AND (b.publish_down = "' . $nullDate. '" OR b.publish_down >= "' . $now. '")' .
+						' WHERE a.published = 1' .
+						($catid ? $catCondition : '') .
+						($access ? ' AND a.access <= ' . $gid : '') .
+						' GROUP BY a.id ' .
+						' ORDER BY ' . $ordering;
 
 				$db->setQuery($query, 0, $count);
 
@@ -448,136 +448,136 @@ else
 				$now = $date->toMySQL();
 
 				$where	= 'a.state = 1'
-				. ' AND (a.publish_up = ' . $db->Quote($nullDate) . ' OR a.publish_up <= ' . $db->Quote($now) . ')'
-				. ' AND (a.publish_down = ' . $db->Quote($nullDate) . ' OR a.publish_down >= ' . $db->Quote($now) . ')'
-				;
+						. ' AND (a.publish_up = ' . $db->Quote($nullDate) . ' OR a.publish_up <= ' . $db->Quote($now) . ')'
+								. ' AND (a.publish_down = ' . $db->Quote($nullDate) . ' OR a.publish_down >= ' . $db->Quote($now) . ')'
+										;
 
-				// User Filter
-				switch ($params->get('user_id'))
-				{
+										// User Filter
+										switch ($params->get('user_id'))
+										{
 
-					case 'by_me':
-					$where .= ' AND (created_by = ' . (int) $userId . ' OR modified_by = ' . (int) $userId . ')';
-					break;
+											case 'by_me':
+												$where .= ' AND (created_by = ' . (int) $userId . ' OR modified_by = ' . (int) $userId . ')';
+												break;
 
-					case 'not_me':
-					$where .= ' AND (created_by <> ' . (int) $userId . ' AND modified_by <> ' . (int) $userId . ')';
-					break;
-				}
+											case 'not_me':
+												$where .= ' AND (created_by <> ' . (int) $userId . ' AND modified_by <> ' . (int) $userId . ')';
+												break;
+										}
 
-				// Ordering
-				switch ($params->get('ordering'))
-				{
+										// Ordering
+										switch ($params->get('ordering'))
+										{
 
-					case 'random':
-					$ordering = 'RAND()';
-					break;
+											case 'random':
+												$ordering = 'RAND()';
+												break;
 
-					case 'date':
-					$ordering = 'a.created';
-					break;
+											case 'date':
+												$ordering = 'a.created';
+												break;
 
-					case 'rdate':
-					$ordering = 'a.created DESC';
-					break;
+											case 'rdate':
+												$ordering = 'a.created DESC';
+												break;
 
-					case 'alpha':
-					$ordering = 'a.title';
-					break;
+											case 'alpha':
+												$ordering = 'a.title';
+												break;
 
-					case 'ralpha':
-					$ordering = 'a.title DESC';
-					break;
+											case 'ralpha':
+												$ordering = 'a.title DESC';
+												break;
 
-					case 'hits':
-					$ordering = 'a.hits DESC';
-					break;
+											case 'hits':
+												$ordering = 'a.hits DESC';
+												break;
 
-					case 'rhits':
-					$ordering = 'a.hits ASC';
-					break;
+											case 'rhits':
+												$ordering = 'a.hits ASC';
+												break;
 
-					case 'order':
+											case 'order':
 
-					default:
-					$ordering = 'a.ordering';
-					break;
-				}
+											default:
+												$ordering = 'a.ordering';
+												break;
+										}
 
-				if ($artid)
-				{
-					if (is_array($artid))
-					{
-						$artCondition = ' AND (a.id IN (' . implode(', ', $artid) . '))';
-					} else
-					{
-						$artCondition = ' AND (a.id = ' . $artid. ')';
-					}
-				}
+										if ($artid)
+										{
+											if (is_array($artid))
+											{
+												$artCondition = ' AND (a.id IN (' . implode(', ', $artid) . '))';
+											} else
+											{
+												$artCondition = ' AND (a.id = ' . $artid. ')';
+											}
+										}
 
-				if ($catid)
-				{
-					if (is_array($catid))
-					{
-						JArrayHelper::toInteger($catid);
-						$catCondition = ' AND (cc.id=' . implode(' OR cc.id=', $catid) . ')';
+										if ($catid)
+										{
+											if (is_array($catid))
+											{
+												JArrayHelper::toInteger($catid);
+												$catCondition = ' AND (cc.id=' . implode(' OR cc.id=', $catid) . ')';
 
-						if ($artid){
-							$catCondition = ' OR (cc.id=' . implode(' OR cc.id=', $catid) . ')';
-						}
-					}
-					else
-					{
-						$ids = explode(', ', $catid);
-						JArrayHelper::toInteger($ids);
-						$catCondition = ' AND (cc.id=' . implode(' OR cc.id=', $ids) . ')';
+												if ($artid){
+													$catCondition = ' OR (cc.id=' . implode(' OR cc.id=', $catid) . ')';
+												}
+											}
+											else
+											{
+												$ids = explode(', ', $catid);
+												JArrayHelper::toInteger($ids);
+												$catCondition = ' AND (cc.id=' . implode(' OR cc.id=', $ids) . ')';
 
-						if ($artid){
-							$catCondition = ' OR (cc.id=' . implode(' OR cc.id=', $ids) . ')';
-						}
-					}
-				}
+												if ($artid){
+													$catCondition = ' OR (cc.id=' . implode(' OR cc.id=', $ids) . ')';
+												}
+											}
+										}
 
-				// Content Items only
-				$query = 'SELECT a.*, ' .
-				' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug, ' .
-				' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug' .
-				' FROM #__content AS a' .
-				($show_front == '0' ? ' LEFT JOIN #__content_frontpage AS f ON f.content_id = a.id' : '') .
-				' INNER JOIN #__categories AS cc ON cc.id = a.catid' .
-				' INNER JOIN #__sections AS s ON s.id = a.sectionid' .
-				' WHERE ' . $where . ' AND s.id > 0' .
-				($access ? ' AND a.access <= ' . (int) $aid. ' AND cc.access <= ' . (int) $aid. ' AND s.access <= ' . (int) $aid : '') .
-				($artid ? $artCondition : '') .
-				($catid ? $catCondition : '') .
-				($show_front == '0' ? ' AND f.content_id IS NULL ' : '') .
-				' AND s.published = 1' .
-				' AND cc.published = 1' .
-				' ORDER BY ' . $ordering;
+										// Content Items only
+										$query = 'SELECT a.*, ' .
+												' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug, ' .
+												' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug' .
+												' FROM #__content AS a' .
+												($show_front == '0' ? ' LEFT JOIN #__content_frontpage AS f ON f.content_id = a.id' : '') .
+												' INNER JOIN #__categories AS cc ON cc.id = a.catid' .
+												' INNER JOIN #__sections AS s ON s.id = a.sectionid' .
+												' WHERE ' . $where . ' AND s.id > 0' .
+												($access ? ' AND a.access <= ' . (int) $aid. ' AND cc.access <= ' . (int) $aid. ' AND s.access <= ' . (int) $aid : '') .
+												($artid ? $artCondition : '') .
+												($catid ? $catCondition : '') .
+												($show_front == '0' ? ' AND f.content_id IS NULL ' : '') .
+												' AND s.published = 1' .
+												' AND cc.published = 1' .
+												' ORDER BY ' . $ordering;
 
-				$db->setQuery($query, 0, $count);
-				$rows = $db->loadObjectList();
+										$db->setQuery($query, 0, $count);
+										$rows = $db->loadObjectList();
 
-				$i		= 0;
-				$lists	= array();
+										$i		= 0;
+										$lists	= array();
 
-				foreach ($rows as $row)
-				{
-					if ($row->access <= $aid)
-					{
-						$lists[$i]->link = JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug, $row->sectionid));
-					}
-					else
-					{
-						$lists[$i]->link = JRoute::_('index.php?option=com_user&view=login');
-					}
+										foreach ($rows as $row)
+										{
+											if ($row->access <= $aid)
+											{
+												$lists[$i]->link = JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug, $row->sectionid));
+											}
+											else
+											{
+												$lists[$i]->link = JRoute::_('index.php?option=com_user&view=login');
+											}
 
-					$lists[$i]->title = $row->title;
-					$lists[$i]->text = $row->introtext;
-					$i++;
-				}
+											$lists[$i]->title = $row->title;
+											$lists[$i]->text = $row->introtext;
+											$i++;
+										}
 
-				return $lists;
+										return $lists;
 			}
 		}
 	}
@@ -587,8 +587,8 @@ else
 
 /*********************************************************************************************************************
  *
- * Helper for K2 v2.5.x
- *
+* Helper for K2 v2.5.x
+*
 **********************************************************************************************************************/
 
 
@@ -983,7 +983,7 @@ class ModCCK2ContentHelper
 				foreach ($items as $item)
 				{
 
-				// Images
+					// Images
 					if (JFile::exists(JPATH_SITE . '/media/k2/categories/' . $item->image))
 					{
 						$item->image = 'media/k2/categories/' . $item->image;

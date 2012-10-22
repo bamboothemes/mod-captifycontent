@@ -229,8 +229,8 @@ class SuperBlogger {
 	}
 
 	// Twitter updates
-	function getTwitterUpdates($twitterUsername,$siteTweetsLimit,$cacheTime,$pluginName){
-
+	function getTwitterUpdates($twitterUsername,$siteTweetsLimit,$cacheTime,$pluginName)
+	{
 		jimport('joomla.filesystem.file');
 		global $mainframe;
 
@@ -307,19 +307,21 @@ class SuperBlogger {
 	}
 
 	// Path overrides
-	function getTemplatePath($pluginName,$file){
-
+	function getTemplatePath($pluginName,$file)
+	{
 		global $mainframe;
 		$p = new JObject;
 
-		if(file_exists(JPATH_SITE.DS.'templates'.DS.$mainframe->getTemplate().DS.'html'.DS.$pluginName.DS.str_replace('/',DS,$file))){
-			$p->file = JPATH_SITE.DS.'templates'.DS.$mainframe->getTemplate().DS.'html'.DS.$pluginName.DS.$file;
-			$p->http = JURI::base()."templates/".$mainframe->getTemplate()."/html/{$pluginName}/{$file}";
-		} else {
-			$p->file = JPATH_SITE.DS.'plugins'.DS.'content'.DS.$pluginName.DS.'tmpl'.DS.$file;
-			$p->http = JURI::base()."plugins/content/{$pluginName}/tmpl/{$file}";
+		if (file_exists(JPATH_SITE . '/templates/' . $mainframe->getTemplate() . '/html/' . $pluginName . '/' . $file))
+		{
+			$p->file = JPATH_SITE . '/templates/' . $mainframe->getTemplate() . '/html/' . $pluginName . '/' . $file;
+			$p->http = JURI::base() . "templates/" . $mainframe->getTemplate() . "/html/{$pluginName}/{$file}";
+		}
+		else
+		{
+			$p->file = JPATH_SITE . '/plugins/content/' . $pluginName . '/tmpl/' . $file;
+			$p->http = JURI::base() . "plugins/content/{$pluginName}/tmpl/{$file}";
 		}
 		return $p;
 	}
-
 } // end class
