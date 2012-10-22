@@ -1,15 +1,11 @@
 <?php
 /**
- * @version    $Id: mod_sections.php 10381 2008-06-01 03:35:53Z pasamio $
- * @package    Joomla
- * @copyright  Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
- * @license    GNU/GPL, see LICENSE.php
- *
- * Joomla! is free software. This version may have been modified pursuant
- * to the GNU General Public License, and as distributed it includes or
- * is derivative of works licensed under the GNU General Public License or
- * other free or open source software licenses.
- * See COPYRIGHT.php for copyright notices and details.
+ * @package		##package##
+ * @subpackage	##subpackage##
+ * @author		##author##
+ * @copyright 	##copyright##
+ * @license		##license##
+ * @version		##version##
  */
 
 // No direct access
@@ -24,15 +20,22 @@ $app = JFactory::getApplication();
 
 // Sets variables so we can check if framework or library is present
 $jblibrary = JPATH_SITE . '/media/plg_jblibrary/helpers/image.php';
-$framework = JPATH_ROOT . '/templates/' . $app->getTemplate() . '/includes/config.php';
+$framework2 = JPATH_ROOT . '/media/zengridframework/helpers/image.php';
+$framework1 = JPATH_ROOT . '/templates/' . $app->getTemplate() . '/includes/config.php';
 
-if (file_exists($framework)) // Checks to see if framework is installed
+if (file_exists($framework2)) // Checks to see if framework is installed
 {
-	require_once $framework;
+	require_once $framework2;
 	$zgf = 1;
 	$library = JURI::base(true) . '/media/zengridframework/';
 }
-elseif (file_exists($jblibrary)) // Checks to see if JB Library is installed
+else if (file_exists($framework1)) // Checks to see if framework is installed
+{
+	require_once $framework1;
+	$zgf = 1;
+	$library = JURI::base(true) . '/media/zengridframework/';
+}
+else if (file_exists($jblibrary)) // Checks to see if JB Library is installed
 {
 	require_once $jblibrary;
 	$zgf = 0;
@@ -115,18 +118,23 @@ if ($scripts)
 	}
 }
 
-if ((($contentSource == "k2") || ($contentSource == "k2category")) && (isK2Installed()))
+if (($contentSource == "k2") || ($contentSource == "k2category"))
 {
-	$list = ModCCK2ContentHelper::getList($params);
+	if (isK2Installed())
+	{
+		$list = ModCCK2ContentHelper::getList($params);
+	}
+	else
+	{
+		echo 'K2 is not installed!<br />';
+
+		return;
+	}
 
 }
 elseif (($contentSource == "content") || ($contentSource == "category") || ($contentSource == "section"))
 {
 	$list = ModCaptifycontentHelper::getList($params);
-}
-else
-{
-	echo 'K2 is not installed!<br />';
 }
 
 if (!isset($list) || !count($list))
