@@ -1,6 +1,6 @@
 /* jQuery Captify Plugin
 
-* 
+*
 
 * Copyright (C) 2008 Brian Reavis
 
@@ -30,9 +30,9 @@ jQuery.fn.extend({
 
 			opacity: '0.35',				// opacity of the caption on mouse over
 
-			className: 'caption-bottom',	// the name of the CSS class to apply to the caption box         
+			className: 'caption-bottom',	// the name of the CSS class to apply to the caption box
 
-			position: 'bottom',				// position of the caption (top or bottom)         
+			position: 'bottom',				// position of the caption (top or bottom)
 
 			spanWidth: '100%'				// caption span % of the image
 
@@ -60,7 +60,7 @@ jQuery.fn.extend({
 
 
 
-				//pull the label from another element if there is a 
+				//pull the label from another element if there is a
 
 				//valid element id inside the rel="..." attribute, otherwise,
 
@@ -198,7 +198,7 @@ jQuery.fn.extend({
 
 				   : { hide: 0, show: -caption.outerHeight() + topBorderAdj };
 
-				
+
 
 				//pull the label up on top of the background
 
@@ -206,7 +206,7 @@ jQuery.fn.extend({
 
 				caption.css('marginTop', captionPosition[o.animation == 'fade' || o.animation == 'always-on' ? 'show' : 'hide']);
 
-				
+
 
 				//function to push the caption out of view
 

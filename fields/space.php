@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 class JFormFieldBuffer extends JFormField {
 
 	protected $type = 'buffer';
-	
+
 	protected function getInput($name, $value, &$node, $control_name){
 		// Output
 		return '

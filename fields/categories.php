@@ -28,7 +28,7 @@ class JFormFieldCategories extends JFormField {
 		// Create the 'all categories' listing
 		$categories[0]->id = '';
 		$categories[0]->title = JText::_("Select all categories");
-		
+
 		foreach ($results as $result) {
 			array_push($categories,$result);
 		}

@@ -15,19 +15,19 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class JElementCategories extends JElement {
 
 	var	$_name = 'categories';
-	
+
 	function fetchElement($name, $value, &$node, $control_name){
 		$db = &JFactory::getDBO();
 		$query = 'SELECT * FROM #__sections WHERE published=1';
 		$db->setQuery( $query );
 		$sections = $db->loadObjectList();
-		
+
 		$categories=array();
-		
+
 		// Create the 'all categories' listing
 		$categories[0]->id = '';
 		$categories[0]->title = JText::_("Select all categories");
-		
+
 		// Create category listings, grouped by section
 		foreach ($sections as $section) {
 			$optgroup = JHTML::_('select.optgroup',$section->title,'id','title');
@@ -39,7 +39,7 @@ class JElementCategories extends JElement {
 				array_push($categories,$result);
 			}
 		}
-		
+
 		// Create the 'Uncategorised' listing
 		$optgroup = JHTML::_('select.optgroup',JText::_("Uncategorised"),'id','title');
 		array_push($categories,$optgroup);
@@ -51,5 +51,5 @@ class JElementCategories extends JElement {
 		// Output
 		return JHTML::_('select.genericlist',  $categories, ''.$control_name.'['.$name.'][]', 'class="inputbox" style="width:90%;"  multiple="multiple" size="10"', 'id', 'title', $value );
 	}
-	
+
 } // end class
