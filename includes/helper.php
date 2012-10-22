@@ -146,7 +146,7 @@ class SuperBlogger {
 		// TO DO: add GD check here
 
 		jimport('joomla.filesystem.file');
-		global $mainframe;
+		global $app;
 
 		$site_absolutepath = JPATH_SITE;
 		$site_httppath = JURI::base();
@@ -232,7 +232,7 @@ class SuperBlogger {
 	function getTwitterUpdates($twitterUsername,$siteTweetsLimit,$cacheTime,$pluginName)
 	{
 		jimport('joomla.filesystem.file');
-		global $mainframe;
+		global $app;
 
 		$site_absolutepath = JPATH_SITE;
 
@@ -309,13 +309,13 @@ class SuperBlogger {
 	// Path overrides
 	function getTemplatePath($pluginName,$file)
 	{
-		global $mainframe;
+		global $app;
 		$p = new JObject;
 
-		if (file_exists(JPATH_SITE . '/templates/' . $mainframe->getTemplate() . '/html/' . $pluginName . '/' . $file))
+		if (file_exists(JPATH_SITE . '/templates/' . $app->getTemplate() . '/html/' . $pluginName . '/' . $file))
 		{
-			$p->file = JPATH_SITE . '/templates/' . $mainframe->getTemplate() . '/html/' . $pluginName . '/' . $file;
-			$p->http = JURI::base() . "templates/" . $mainframe->getTemplate() . "/html/{$pluginName}/{$file}";
+			$p->file = JPATH_SITE . '/templates/' . $app->getTemplate() . '/html/' . $pluginName . '/' . $file;
+			$p->http = JURI::base() . "templates/" . $app->getTemplate() . "/html/{$pluginName}/{$file}";
 		}
 		else
 		{

@@ -91,26 +91,12 @@ $contentSource = $params->get('type', 'content');
 if (substr(JVERSION, 0, 3) >= '1.6')
 {
 	// Test to see if cache is enabled
-	if ($app->getCfg('caching'))
-	{
-		$cache = 1;
-	}
-	else
-	{
-		$cache = 0;
-	}
+	$cache = $app->getCfg('caching') ? 1 : 0;
 }
 else
 {
 	// Test to see if cache is enabled
-	if ($mainframe->getCfg('caching'))
-	{
-		$cache = 1;
-	}
-	else
-	{
-		$cache = 0;
-	}
+	$cache = $app->getCfg('caching') ? 1 : 0;
 }
 
 // Load css into the head
@@ -129,9 +115,7 @@ if ($scripts)
 	}
 }
 
-$k2 = JPATH_SITE . '/administrator/components/com_k2/admin.k2.php';
-
-if ((($contentSource == "k2") || ($contentSource == "k2category")) && (file_exists($k2)))
+if ((($contentSource == "k2") || ($contentSource == "k2category")) && (isK2Installed()))
 {
 	$list = ModCCK2ContentHelper::getList($params);
 

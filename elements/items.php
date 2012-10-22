@@ -20,7 +20,16 @@ class JElementItems extends JElement
 		{
 			$db = &JFactory::getDBO();
 			$jnow = &JFactory::getDate();
-			$now = $jnow->toMySQL();
+
+			if (version_compare(JVERSION, '3.0', '<'))
+			{
+				$now = $jnow->toMySQL();
+			}
+			else
+			{
+				$now = $jnow->toSql();
+			}
+
 			$nullDate = $db->getNullDate();
 			$size = ( $node->attributes('size') ? $node->attributes('size') : 5 );
 			$query = "SELECT id, title FROM #__k2_items
