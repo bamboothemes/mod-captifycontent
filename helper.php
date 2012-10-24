@@ -1097,9 +1097,16 @@ function isK2Installed()
 
 function getK2Version()
 {
+	jimport('joomla.installer.installer');
 	$installer = new JInstaller;
+
 	$installer->setPath('source', JPATH_ADMINISTRATOR . '/components/com_k2');
 	$manifest = $installer->getManifest();
+
+	if (version_compare(JVERSION, '1.6', '<'))
+	{
+		return $manifest->document->getElementByPath('version')->data();
+	}
 
 	return (string) $manifest->version;
 }
