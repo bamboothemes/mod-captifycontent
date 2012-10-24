@@ -2,13 +2,15 @@
 /// no direct access
 defined('_JEXEC') or die('Restricted access');
 
+require_once JPATH_ROOT . '/modules/mod_captifyContent/helper.php';
+
 class JFormFieldK2itemslist extends JFormField
 {
    protected $type = 'k2itemslist';
 
    protected function getInput()
    {
-		if (file_exists(JPATH_SITE . '/administrator/components/com_k2/admin.k2.php'))
+		if(isK2Installed())
 		{
 
 			$db = JFactory::getDBO();

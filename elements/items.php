@@ -10,13 +10,15 @@
 /// no direct access
 defined('_JEXEC') or die('Restricted access');
 
+require_once JPATH_ROOT . '/modules/mod_captifyContent/helper.php';
+
 class JElementItems extends JElement
 {
    var   $_name = 'Items';
 
    function fetchElement($name, $value, &$node, $control_name)
    {
-		if(file_exists(JPATH_SITE . '/administrator/components/com_k2/admin.k2.php'))
+		if(isK2Installed())
 		{
 			$db = &JFactory::getDBO();
 			$jnow = &JFactory::getDate();

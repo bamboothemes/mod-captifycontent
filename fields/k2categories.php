@@ -10,6 +10,8 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+require_once JPATH_ROOT . '/modules/mod_captifyContent/helper.php';
+
 // Create a category selector
 
 class JFormFieldK2categories extends JFormField
@@ -18,7 +20,7 @@ class JFormFieldK2categories extends JFormField
 
 	function getInput()
 	{
-		if(file_exists(JPATH_SITE . '/administrator/components/com_k2/admin.k2.php'))
+		if(isK2Installed())
 		{
 
 			$db = &JFactory::getDBO();
