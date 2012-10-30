@@ -105,9 +105,7 @@ else
 // Load css into the head
 if ($scripts)
 {
-	if (!$zgf)
-	{
-		if (!$cache)
+	if (!$cache)
 		{
 			$document->addStyleSheet($modbase . 'css/captifyContent.css');
 			if ($useCaptify == '2')
@@ -115,7 +113,7 @@ if ($scripts)
 				$document->addScript($modbase . "js/captify.tiny.js");
 			}
 		}
-	}
+
 }
 
 if (($contentSource == "k2") || ($contentSource == "k2category"))

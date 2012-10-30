@@ -12,7 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 
-<?php if ($scripts && !$zgf && $cache) : ?>
+<?php if ($scripts && $cache) : ?>
 	<link rel="stylesheet" href="<?php echo $modbase?>css/captifyContent.css" type="text/css" />
 
 	<?php if ($useCaptify == '2') : ?>
