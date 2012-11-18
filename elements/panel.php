@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
 * @id $Id$
 * @author  Joomla Bamboo
@@ -14,8 +14,8 @@ class JElementPanel extends JElement
 	   var   $_name = 'panel';
 	   function fetchElement($name, $value, &$node, $control_name)
 	   {
-		   	//when our code starts the second td in a tr are open
-		   	//we close the second td in tr
+			//when our code starts the second td in a tr are open
+			//we close the second td in tr
 			$panel = '</td></tr>';
 			//we close the current table and divs
 			$panel .= '</tbody></table></div></div>';

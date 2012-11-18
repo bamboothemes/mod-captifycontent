@@ -10,30 +10,31 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+require_once JPATH_ROOT . '/modules/mod_captifyContent/helper.php';
+
 // Create a category selector
 
-class JFormFieldK2categories extends JFormField {
+class JFormFieldK2categories extends JFormField
+{
+	var	$type = 'k2categories';
 
-		var	$type = 'k2categories';
+	function getInput()
+	{
+		if(isK2Installed())
+		{
 
-		function getInput(){
-			
-			if(file_exists(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_k2'.DS.'admin.k2.php'))
-		   		{
-			
 			$db = &JFactory::getDBO();
 			$query = 'SELECT id,name FROM #__k2_categories m WHERE published=1 AND trash = 0 ORDER BY parent, ordering';
 			$db->setQuery( $query );
 			$results = $db->loadObjectList();
 			$categories=array();
-			foreach ($results as $result) {
+			foreach ($results as $result)
+			{
 				$result->title = $result->name;
 				array_push($categories,$result);
-
 			}
 
 			return JHTML::_('select.genericlist',  $categories, ''.$this->formControl.'[params]['.$this->fieldname.'][]', 'class="inputbox" style="width:90%;"  multiple="multiple" size="5"', 'id', 'title', $this->value, $this->id );
-			
 		}
 	}
 }

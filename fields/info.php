@@ -22,6 +22,6 @@ class JFormFieldInfo extends JFormField {
 		';
 	}
 	public function getLabel() {
-        return '<span style="display:none">' . parent::getLabel() . '</span>';
-    }
+		return '<span style="display:none">' . parent::getLabel() . '</span>';
+	}
 }

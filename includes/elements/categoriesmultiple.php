@@ -37,18 +37,18 @@ class JElementCategoriesmultiple extends JElement
 		foreach ( $list as $item ) {
 			$mitems[] = JHTML::_('select.option',  $item->id, '&nbsp;&nbsp;&nbsp;'.$item->treename );
 		}
-		
+
 		$doc = & JFactory::getDocument();
 		$js = "
 		window.addEvent('domready', function(){
-			
+
 			$('paramscatfilter0').addEvent('click', function(){
 				$('paramscategory_id').setProperty('disabled', 'disabled');
 				$$('#paramscategory_id option').each(function(el) {
 					el.setProperty('selected', 'selected');
 				});
 			})
-			
+
 			$('paramscatfilter1').addEvent('click', function(){
 				$('paramscategory_id').removeProperty('disabled');
 				$$('#paramscategory_id option').each(function(el) {
@@ -56,21 +56,21 @@ class JElementCategoriesmultiple extends JElement
 				});
 
 			})
-			
+
 			if ($('paramscatfilter0').checked) {
 				$('paramscategory_id').setProperty('disabled', 'disabled');
 				$$('#paramscategory_id option').each(function(el) {
 					el.setProperty('selected', 'selected');
 				});
 			}
-			
+
 			if ($('paramscatfilter1').checked) {
 				$('paramscategory_id').removeProperty('disabled');
 			}
-			
+
 		});
 		";
-		
+
 		$doc->addScriptDeclaration($js);
 		$output= JHTML::_('select.genericlist',  $mitems, ''.$control_name.'['.$name.'][]', 'class="inputbox" style="width:90%;" multiple="multiple" size="10"', 'value', 'text', $value );
 		return $output;
