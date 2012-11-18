@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="1.6.0" method="upgrade">
+<extension type="module" version="1.7.0" method="upgrade">
     <name>JB Captify Content</name>
     <author>Joomla Bamboo</author>
     <creationDate>April 2011</creationDate>
     <copyright>This extension in released under the GNU/GPL License - http://www.gnu.org/copyleft/gpl.html</copyright>
     <authorEmail>design@joomlabamboo.com</authorEmail>
     <authorUrl>http://www.joomlabamboo.com</authorUrl>
-    <version>1.0</version>
+    <version>1.1.0</version>
     <description>Captify Content displays the image assigned to your categories or articles and the title using the awesome captifyScript. If the section or category does not have an image assigned to it then it will not show. Please note that you need to have the JB Library plugin installed and published for this module to work as desired.</description>
     <files>
         <filename module="mod_captifyContent">mod_captifyContent.php</filename>
@@ -33,17 +33,10 @@
 		        </field>
 			</fieldset>
         	<fieldset name="scripts" group="scripts" label="Captify Content Scripts">
-        		<field type="info" default="The following options determine how the css and javascript/jquery files are referenced on your site. The option to load the scripts in the head of the template is ideal but will not work if Joomla cache is turned on. The option to load them in the website body is easy but is not xhtml compliant. The last option disables the scripts all together and is ideal if you are using more than one instance of the module on the page. If you select the last option then you need to make sure that the scripts are included at least once on the page in your template or via another module." />
-		        <field name="loadCSS" type="list" default="head" label="Load CSS?" description="Set this option to yes if you would like the module to load its css styles. Set this option to no if you would like disable the modules css syles.">
-		            <option value="head">Yes - Loads in the head but incompatible with Joomla cache.</option>
-		            <option value="body">Yes - Load in the body but not xhtml valid</option>
-		            <option value="no">Disable CSS</option>
-		        </field>
-		        <field name="loadJS" type="list" default="head" label="Load Scripts?" description="Set this option to yes if you would like the module to load its javascript files. Set this option to no if you would like disable the modules javascript files.">
-		            <option value="head">Yes - Loads in the head but incompatible with Joomla cache.</option>
-		            <option value="body">Yes - Load in the body but not xhtml valid</option>
-		            <option value="no">Disable scripts</option>
-		        </field>
+        		<field name="scripts" type="radio" default="article" label="CSS and Javascript" description="This option can be used to remove all javascript and css from being loaded by the microblog module. If in doubt leave this option enabled. If you are using the Zen Grid framework version2 then the scripts and css files will be loaded via the framework. If your site uses caching then the relevant files will be loaded into the body of your site.">
+			            <option value="1">Enable CSS and Javascript</option>
+			            <option value="0">Disable CSS and Javascript</option>
+			        </field>
 			</fieldset>
         	<fieldset name="articles" group="articles" label="Content Image Filtering Options">
 				<field name="category_filtering_type" type="radio"
