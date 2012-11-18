@@ -6,6 +6,10 @@
 * @copyright Copyright (C) 2006 - 2010 Joomla Bamboo. http://www.joomlabamboo.com  All rights reserved.
 * @license  GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
 */
+
+/// no direct access
+defined('_JEXEC') or die('Restricted access');
+
 class JElementItems extends JElement
 {
    var   $_name = 'Items';

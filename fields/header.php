@@ -8,6 +8,7 @@
 */
 // no direct access
 defined('_JEXEC') or die('Restricted access');
+
 class JFormFieldHeader extends JFormField {
 	protected $type = 'header';
 	protected function getInput(){
