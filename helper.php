@@ -27,6 +27,8 @@ else
 	class ZenJModel extends JModelLegacy {};
 }
 
+$isK2GE260 = isK2GE260();
+
 if (substr(JVERSION, 0, 3) >= '1.6')
 {
 	/*********************************************************************************************************************
@@ -318,8 +320,7 @@ else
 			}
 
 			// Get K2 version
-			$k2Version = getK2Version();
-			if (version_compare($k2Version, '2.6.0', '>='))
+			if ($isK2GE260)
 			{
 				// public = 1
 				$gid += 1;
@@ -475,8 +476,7 @@ else
 				}
 
 				// Get K2 version
-				$k2Version = getK2Version();
-				if (version_compare($k2Version, '2.6.0', '>='))
+				if ($isK2GE260)
 				{
 					// public = 1
 					$aid += 1;
@@ -663,8 +663,7 @@ class ModCCK2ContentHelper
 			}
 
 			// Get K2 version
-			$k2Version = getK2Version();
-			if (version_compare($k2Version, '2.6.0', '>='))
+			if ($isK2GE260)
 			{
 				// public = 1
 				$aid += 1;
@@ -958,9 +957,7 @@ class ModCCK2ContentHelper
 			}
 
 			// Get K2 version
-			$k2Version = getK2Version();
-
-			if (version_compare($k2Version, '2.6.0', '>='))
+			if ($isK2GE260)
 			{
 				// public = 1
 				$aid += 1;
@@ -1095,18 +1092,27 @@ function isK2Installed()
 		|| JFile::exists(JPATH_ADMINISTRATOR . '/components/com_k2/k2.php');
 }
 
-function getK2Version()
+// Check if K2 is >= 2.6.0
+function isK2GE260()
 {
-	jimport('joomla.installer.installer');
-	$installer = new JInstaller;
+	$k2Path = JPATH_ADMINISTRATOR . '/components/com_k2';
+	$result = false;
 
-	$installer->setPath('source', JPATH_ADMINISTRATOR . '/components/com_k2');
-	$manifest = $installer->getManifest();
-
-	if (version_compare(JVERSION, '1.6', '<'))
+	if (version_compare(JVERSION, '1.6', '>='))
 	{
-		return $manifest->document->getElementByPath('version')->data();
+		jimport('joomla.filesystem.file');
+
+		// Check if K2 manifest file exists
+		// K2 versions, older than 2.6.1 have missed manifest file
+		if (JFile::exists($k2Path . 'k2.xml'))
+		{
+			$installer = new JInstaller;
+			$installer->setPath('source', $k2Path);
+			$manifest = $installer->getManifest();
+
+			$result = version_compare($manifest->version, '2.6.0', '>=');
+		}
 	}
 
-	return (string) $manifest->version;
+	return $result;
 }
