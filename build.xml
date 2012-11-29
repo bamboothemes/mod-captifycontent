@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project default="build" name="jTweet">
+<project default="build" name="Mod - CaptifyContent">
 	<property file="build.properties" override="false" />
 	<property file="${dir.build}/common.properties" override="false" />
 	<xmlproperty file="${dir.local}/${jb.name}.xml" keepRoot="false" prefix="jb." />
