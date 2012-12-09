@@ -78,7 +78,7 @@ if ($fadeEffect) { ?>
 		});
 	//--><!]]>
 	</script>
-<?php }
+<?php 
 
 $numMB = sizeof($list);
 $imageNumber = 0;
