@@ -685,7 +685,7 @@ class ModCCK2ContentHelper
 
 			$query .= " WHERE i.published = 1 AND i.trash = 0 AND c.published = 1 AND c.trash = 0";
 
-			if (K2_JVERSION=='16')
+			if (version_compare(JVERSION, '1.6', '>='))
 			{
 				$query .= " AND i.access IN(" .implode(', ', $user->authorisedLevels()) .") ";
 			}
@@ -694,7 +694,7 @@ class ModCCK2ContentHelper
 				$query .= " AND i.access<={$aid} ";
 			}
 
-			if (K2_JVERSION=='16')
+			if (version_compare(JVERSION, '1.6', '>='))
 			{
 				$query .= " AND c.access IN(" .implode(', ', $user->authorisedLevels()) .") ";
 			}
@@ -786,7 +786,7 @@ class ModCCK2ContentHelper
 				$query .= " AND comments.published = 1";
 			}
 
-			if (K2_JVERSION=='16')
+			if (version_compare(JVERSION, '1.6', '>='))
 			{
 				if ($app->getLanguageFilter())
 				{
@@ -1095,7 +1095,7 @@ function isK2Installed()
 // Check if K2 is >= 2.6.0
 function isK2GE260()
 {
-	$k2Path = JPATH_ADMINISTRATOR . '/components/com_k2';
+	$k2Path = JPATH_ADMINISTRATOR . '/components/com_k2/';
 	$result = false;
 
 	if (version_compare(JVERSION, '1.6', '>='))
