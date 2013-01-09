@@ -29,6 +29,7 @@ else
 
 $isK2GE260 = isK2GE260();
 
+
 if (substr(JVERSION, 0, 3) >= '1.6')
 {
 	/*********************************************************************************************************************
@@ -663,7 +664,7 @@ class ModCCK2ContentHelper
 			}
 
 			// Get K2 version
-			if ($isK2GE260)
+			if (isK2GE260())
 			{
 				// public = 1
 				$aid += 1;
@@ -957,7 +958,7 @@ class ModCCK2ContentHelper
 			}
 
 			// Get K2 version
-			if ($isK2GE260)
+			if (isK2GE260())
 			{
 				// public = 1
 				$aid += 1;
@@ -1092,11 +1093,15 @@ function isK2Installed()
 		|| JFile::exists(JPATH_ADMINISTRATOR . '/components/com_k2/k2.php');
 }
 
+
+
 // Check if K2 is >= 2.6.0
 function isK2GE260()
 {
 	$k2Path = JPATH_ADMINISTRATOR . '/components/com_k2/';
 	$result = false;
+	
+	
 
 	if (version_compare(JVERSION, '1.6', '>='))
 	{

@@ -214,7 +214,7 @@ elseif ($contentSource == "content" || $contentSource == "k2") { ?>
 	</div>
 </div>
 <?php
-}
+} }
 ?>
 
 <div class="clear"></div>
