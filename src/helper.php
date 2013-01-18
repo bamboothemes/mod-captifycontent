@@ -321,7 +321,7 @@ else
 			}
 
 			// Get K2 version
-			if ($isK2GE260)
+			if (isK2GE260())
 			{
 				// public = 1
 				$gid += 1;
@@ -477,7 +477,7 @@ else
 				}
 
 				// Get K2 version
-				if ($isK2GE260)
+				if (isK2GE260())
 				{
 					// public = 1
 					$aid += 1;
@@ -1096,24 +1096,27 @@ function isK2Installed()
 // Check if K2 is >= 2.6.0
 function isK2GE260()
 {
-	$k2Path = JPATH_ADMINISTRATOR . '/components/com_k2/';
-	$result = false;
-	
-	
+	static $result = null;
 
-	if (version_compare(JVERSION, '1.6', '>='))
+	if ($result === null)
 	{
-		jimport('joomla.filesystem.file');
+		$k2Path = JPATH_ADMINISTRATOR . '/components/com_k2/';
+		$result = false;
 
-		// Check if K2 manifest file exists
-		// K2 versions, older than 2.6.1 have missed manifest file
-		if (JFile::exists($k2Path . 'k2.xml'))
+		if (version_compare(JVERSION, '1.6', '>='))
 		{
-			$installer = new JInstaller;
-			$installer->setPath('source', $k2Path);
-			$manifest = $installer->getManifest();
+			jimport('joomla.filesystem.file');
 
-			$result = version_compare($manifest->version, '2.6.0', '>=');
+			// Check if K2 manifest file exists
+			// K2 versions, older than 2.6.1 have missed manifest file
+			if (JFile::exists($k2Path . 'k2.xml'))
+			{
+				$installer = new JInstaller;
+				$installer->setPath('source', $k2Path);
+				$manifest = $installer->getManifest();
+
+				$result = version_compare($manifest->version, '2.6.0', '>=');
+			}
 		}
 	}
 
