@@ -276,7 +276,7 @@ else
 
 	require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
-	class ModCaptifycontentHelper
+	Class ModCaptifycontentHelper
 	{
 		public static function getList(&$params)
 		{
@@ -1092,8 +1092,6 @@ function isK2Installed()
 	return JFile::exists(JPATH_ADMINISTRATOR . '/components/com_k2/admin.k2.php')
 		|| JFile::exists(JPATH_ADMINISTRATOR . '/components/com_k2/k2.php');
 }
-
-
 
 // Check if K2 is >= 2.6.0
 function isK2GE260()
