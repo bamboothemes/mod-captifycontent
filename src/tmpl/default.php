@@ -85,7 +85,7 @@ if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) : ?>
 	$startDiv = 0;
 	$firstImage = "";
 
-	if ($contentSource == "category" || $contentSource == "k2category") : ?>
+	if ($contentSource === "category" || $contentSource === "k2category") : ?>
 		<div>
 			<div id="captifyContent<?php echo $module_id ?>" class="captifyContent cc<?php echo $background?>">
 				<?php
@@ -98,6 +98,17 @@ if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) : ?>
 
 					if (preg_match($pattern, $html, $match)) :
 						$item->image = (string)$match[1];
+					else :
+						if (version_compare(JVERSION, '1.6', '>=')) :
+							$params = new JRegistry($item->params);
+						else :
+							$params = new JParameter($item->params);
+						endif;
+
+						$paramImage = $params->get('image');
+						if (!empty($paramImage)) :
+							$item->image = (string)$params->get('image');
+						endif;
 					endif;
 					$sectionImage = $item->image;
 

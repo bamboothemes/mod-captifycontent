@@ -62,19 +62,20 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 			$app = JFactory::getApplication();
 			$appParams = $app->getParams();
 
-			if ($type == "category")
+			if ($type === "category")
 			{
-				// echo $params->get('c_catid', '0');
-				$catids = $params->get('c_catid', '0');
+				$catids = (array)$params->get('c_catid', '0');
 				$access = !JComponentHelper::getParams('com_content')->get('show_noauth');
 				$authorised = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'));
 				$categories = ZenJModel::getInstance('Categories', 'ContentModel', array('ignore_request' => true));
 				$catCount = $params->get('count', 5);
-				$levels = $params->get('c_levels', 1) ? $params->get('c_levels', 1) : 9999;
+				$levels = (int)($params->get('c_levels', 1) ? $params->get('c_levels', 1) : 9999);
+				$show_child_category_articles = (bool)$params->get('c_show_child_category_articles', 0);
 				$categories->setState('filter.published', '1');
 				$categories->setState('filter.access', $access);
 
-				if ($catids && $params->get('c_show_child_category_articles', 0) && (int) $params->get('c_levels', 0) > 0)
+
+				if ($catids && $show_child_category_articles && $levels > 0)
 				{
 					$additional_catids = array();
 					foreach($catids as $catid)
@@ -103,46 +104,48 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 				$items = array();
 				$jcategory = JCategories::getInstance('Content');
 
-				if (is_array($catids)) foreach ($catids as $catid)
+				if (is_array($catids))
 				{
-					$catitem = $jcategory->get($catid);
-
-					if (!($catitem->published))
+					foreach ($catids as $catid)
 					{
-						continue;
-					}
+						$catitem = $jcategory->get($catid);
 
-					$catitem->slug = $catitem->id. ':' . $catitem->alias;
-					$catitem->catslug = $catitem->id ? $catitem->id . ':' . $catitem->alias : $catitem->id;
-
-					if ($access || in_array($catitem->access, $authorised))
-					{
-
-						$catitem->link = JRoute::_(ContentHelperRoute::getCategoryRoute($catitem->id) . '&layout=blog');
-					}
-					else
-					{
-						// Angie Fixed Routing
-						$app	= JFactory::getApplication();
-						$menu	= $app->getMenu();
-						$menuitems	= $menu->getItems('link', 'index.php?option=com_users&view=login');
-
-						if (isset($menuitems[0]))
+						if (!($catitem->published))
 						{
-							$Itemid = $menuitems[0]->id;
-						}
-						else if (JRequest::getInt('Itemid') > 0)
-						{ // use Itemid from requesting page only if there is no existing menu
-							$Itemid = JRequest::getInt('Itemid');
+							continue;
 						}
 
-						$catitem->link = JRoute::_('index.php?option=com_users&view=login&Itemid=' . $Itemid);
+						$catitem->slug = $catitem->id . ':' . $catitem->alias;
+						$catitem->catslug = $catitem->id ? $catitem->id . ':' . $catitem->alias : $catitem->id;
+
+						if ($access || in_array($catitem->access, $authorised))
+						{
+
+							$catitem->link = JRoute::_(ContentHelperRoute::getCategoryRoute($catitem->id) . '&layout=blog');
+						}
+						else
+						{
+							// Angie Fixed Routing
+							$app	= JFactory::getApplication();
+							$menu	= $app->getMenu();
+							$menuitems	= $menu->getItems('link', 'index.php?option=com_users&view=login');
+
+							if (isset($menuitems[0]))
+							{
+								$Itemid = $menuitems[0]->id;
+							}
+							else if (JRequest::getInt('Itemid') > 0)
+							{ // use Itemid from requesting page only if there is no existing menu
+								$Itemid = JRequest::getInt('Itemid');
+							}
+
+							$catitem->link = JRoute::_('index.php?option=com_users&view=login&Itemid=' . $Itemid);
+						}
+
+						$catitem->image = "";
+
+						$items[] = $catitem;
 					}
-
-					$catitem->image = "";
-
-					$items[] = $catitem;
-
 				}
 
 				return $items;
