@@ -4,7 +4,7 @@ jb.name=mod_captifyContent
 jb.package=Captify Content
 jb.subpackage=Captify Content
 jb.link=http://www.joomlabamboo.com/joomla-extensions/captifycontent-beautiful-captions-for-your-content
-jb.version=1.1.11
+jb.version=1.1.12-beta
 
 jb.reponame=mod-captifycontent
 
@@ -15,9 +15,9 @@ dir.packages=${dir.root}/pkgs
 dir.build=/Volumes/SVN/git/scripts/scripts-buildscripts/extensions/
 
 #FTP settings
-ftp.destination.host=ftp.joomlabamboo.net
+ftp.destination.host=
 ftp.destination.port=21
-ftp.destination.username=joomlaba
-ftp.destination.password=R@k&5*!s?5vg
+ftp.destination.username=
+ftp.destination.password=
 ftp.destination.dir=/public_html/dev/extensions/dateTitle/
 ftp.destination.mode=binary
