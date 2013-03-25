@@ -110,7 +110,7 @@ if ($scripts)
 			$document->addStyleSheet($modbase . 'css/captifyContent.css');
 			if ($useCaptify == '2')
 			{
-				$document->addScript($modbase . "js/captify.tiny.js");
+				$document->addScript($modbase . "js/captify.tiny.min.js");
 			}
 		}
 

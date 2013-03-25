@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
 	<link rel="stylesheet" href="<?php echo $modbase?>css/captifyContent.css" type="text/css" />
 
 	<?php if ($useCaptify == '2') : ?>
-		<script type="text/javascript" src="<?php echo $modbase?>js/captify.tiny.js"></script>
+		<script type="text/javascript" src="<?php echo $modbase?>js/captify.tiny.min.js"></script>
 	<?php endif; ?>
 <?php endif; ?>
 
