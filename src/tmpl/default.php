@@ -20,9 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 	<?php endif; ?>
 <?php endif; ?>
 
-<?
-if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) : ?>
-
+<?php if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) : ?>
 	<script type="text/javascript">
 		<!--//--><![CDATA[//><!--
 		jQuery.noConflict();
@@ -65,9 +63,9 @@ if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) : ?>
 					position: '<?php echo $position?>',
 					spanWidth: '100%'
 				});
-			<?php endif;
+			<?php endif; ?>
 
-			if ($fadeEffect) : ?>
+			<?php if ($fadeEffect) : ?>
 				jQuery('img.captify').fadeIn(800); // This sets the opacity of the thumbs to fade down to 60% when the page loads
 				jQuery('img.captify').hover(function(){
 					jQuery(this).fadeTo('slow', 0.6); // This should set the opacity to 100% on hover
@@ -78,6 +76,7 @@ if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) : ?>
 		});
 		//--><!]]>
 	</script>
+
 	<?php
 
 	$numMB = sizeof($list);
@@ -85,7 +84,10 @@ if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) : ?>
 	$startDiv = 0;
 	$firstImage = "";
 
-	if ($contentSource === "category" || $contentSource === "k2category") : ?>
+	?>
+
+	<?php if ($contentSource === "category" || $contentSource === "k2category") : ?>
+
 		<div>
 			<div id="captifyContent<?php echo $module_id ?>" class="captifyContent cc<?php echo $background?>">
 				<?php
@@ -246,9 +248,7 @@ if ($useCaptify == '1' || $useCaptify == '2' || $fadeEffect) : ?>
 				?>
 			</div>
 		</div>
-		<?php
-	endif;
-endif;
-?>
+	<?php endif; ?>
+<?php endif; ?>
 
 <div class="clear"></div>
