@@ -31,21 +31,37 @@ defined('_JEXEC') or die('Restricted access');
 				jQuery('.viewport').mouseenter(function(e) {
 					var titleSpan = jQuery(this).children('a').children('span');
 					if (titleSpan.is(':hidden')) {
-						<?php if ($transition === "fade") : ?>
-							titleSpan.fadeIn(<?php echo $speed?>);
-						<?php else : ?>
-							titleSpan.slideToggle(<?php echo $speed?>);
-						<?php endif; ?>
+						if (! titleSpan.data('animating_in')) {
+							titleSpan.data('animating_in', true);
+
+							<?php if ($transition === "fade") : ?>
+								titleSpan.fadeIn(<?php echo $speed?>, function() {
+									titleSpan.data('animating_in', false);
+								});
+							<?php else : ?>
+								titleSpan.slideToggle(<?php echo $speed?>, function() {
+									titleSpan.data('animating_in', false);
+								});
+							<?php endif; ?>
+						}
 					};
 
 				}).mouseleave(function(e) {
 					var titleSpan = jQuery(this).children('a').children('span');
 					if (titleSpan.is(':visible')) {
-						<?php if ($transition === "fade") : ?>
-							titleSpan.fadeOut(<?php echo $speed?>);
-						<?php else : ?>
-						titleSpan.slideToggle(<?php echo $speed?>);
-						<?php endif; ?>
+						if (! titleSpan.data('animating_out')) {
+							titleSpan.data('animating_out', true);
+
+							<?php if ($transition === "fade") : ?>
+								titleSpan.fadeOut(<?php echo $speed?>, function() {
+									titleSpan.data('animating_out', false);
+								});
+							<?php else : ?>
+								titleSpan.slideToggle(<?php echo $speed?>, function() {
+									titleSpan.data('animating_out', false);
+								});
+							<?php endif; ?>
+						}
 					};
 				});
 
@@ -65,12 +81,39 @@ defined('_JEXEC') or die('Restricted access');
 			<?php endif; ?>
 
 			<?php if ($fadeEffect) : ?>
-				jQuery('img.captify').fadeIn(800); // This sets the opacity of the thumbs to fade down to 60% when the page loads
-				jQuery('img.captify').hover(function(){
-					jQuery(this).fadeTo('slow', 0.6); // This should set the opacity to 100% on hover
-				},function(){
-					jQuery(this).fadeTo('slow', 1.0); // This should set the opacity back to 60% on mouseout
-				});
+				var img = jQuery('img.captify');
+
+				img.fadeIn(800); // This sets the opacity of the thumbs to fade down to 60% when the page loads
+
+				img.hover(
+					function() {
+						if (! jQuery(this).data('animating_in')) {
+							jQuery(this).data('animating_in', true);
+
+							jQuery(this).fadeTo('slow', 0.6, function() {
+								jQuery(this).data('animating_in', false);
+							}); // This should set the opacity to 100% on hover
+						}
+					},
+					function(){
+						var $self = jQuery(this);
+						cHide = function() {
+							if (! $self.data('animating_out')) {
+								$self.data('animating_out', true);
+
+								$self.fadeTo('slow', 1.0, function() {
+									$self.data('animating_out', false);
+								}); // This should set the opacity back to 60% on mouseout
+							}
+						};
+
+						if (! $self.data('animating_out')) {
+							cHide();
+						} else {
+							setTimeout(cHide, 1000);
+						}
+					}
+				);
 			<?php endif; ?>
 		});
 		//--><!]]>

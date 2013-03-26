@@ -178,17 +178,29 @@ jQuery.fn.extend({
 
 			//function to push the caption out of view
 			var cHide = function() {
-				if(!over_caption && !over_img) {
-					var props = o.animation == 'fade' ? {
-						opacity: 0
-					} : {
-						marginTop: captionPosition.hide
-					};
-					caption.animate(props, o.speedOut);
-					if(o.animation == 'fade') {
-						captionContent.animate({
+				if (! captionContent.data('animating_out')) {
+					captionContent.data('animating_out', true);
+
+					if(!over_caption && !over_img) {
+						var props = o.animation == 'fade' ? {
 							opacity: 0
-						}, o.speedOver);
+						} : {
+							marginTop: captionPosition.hide
+						};
+
+						caption.animate(props, o.speedOut, function() {
+							captionContent.data('animating_out', false);
+						});
+
+						if(o.animation == 'fade') {
+							captionContent.animate({opacity: 0}, o.speedOver, function() {
+								captionContent.data('animating_out', false);
+							});
+						}
+					}
+					else
+					{
+						captionContent.data('animating_out', false);
 					}
 				}
 			};
@@ -197,18 +209,28 @@ jQuery.fn.extend({
 				//when the mouse is over the image
 				jQuery(this).hover(
 					function() {
-						over_img = true;
-						if(!over_caption) {
-							var props = o.animation == 'fade' ? {
-								opacity: o.opacity
-							} : {
-								marginTop: captionPosition.show
-							};
-							caption.animate(props, o.speedOver);
-							if(o.animation == 'fade') {
-								captionContent.animate({
-									opacity: 1
-								}, o.speedOver / 2);
+						if (! captionContent.data('animating_in')) {
+							captionContent.data('animating_in', true);
+
+							over_img = true;
+							if(!over_caption) {
+								var props = o.animation == 'fade' ? {
+									opacity: o.opacity
+								} : {
+									marginTop: captionPosition.show
+								};
+								caption.animate(props, o.speedOver, function() {
+									captionContent.data('animating_in', false);
+								});
+								if(o.animation == 'fade') {
+									captionContent.animate({opacity: 1}, o.speedOver / 2, function() {
+										captionContent.data('animating_in', false);
+									});
+								}
+							}
+							else
+							{
+								captionContent.data('animating_in', false);
 							}
 						}
 					},
