@@ -31,12 +31,11 @@ defined('_JEXEC') or die('Restricted access');
 				jQuery('.viewport').mouseenter(function(e) {
 					var titleSpan = jQuery(this).children('a').children('span');
 					if (titleSpan.is(':hidden')) {
-
-					<?php if ($transition === "fade") : ?>
-						titleSpan.fadeIn(<?php echo $speed?>);
-					<?php else : ?>
-						titleSpan.slideToggle(<?php echo $speed?>);
-					<?php endif; ?>
+						<?php if ($transition === "fade") : ?>
+							titleSpan.fadeIn(<?php echo $speed?>);
+						<?php else : ?>
+							titleSpan.slideToggle(<?php echo $speed?>);
+						<?php endif; ?>
 					};
 
 				}).mouseleave(function(e) {
