@@ -106,14 +106,13 @@ else
 if ($scripts)
 {
 	if (!$cache)
+	{
+		$document->addStyleSheet($modbase . 'css/captifyContent.css');
+		if ($useCaptify == '2')
 		{
-			$document->addStyleSheet($modbase . 'css/captifyContent.css');
-			if ($useCaptify == '2')
-			{
-				$document->addScript($modbase . "js/captify.tiny.min.js");
-			}
+			$document->addScript($modbase . "js/captify.tiny.min.js");
 		}
-
+	}
 }
 
 if (($contentSource == "k2") || ($contentSource == "k2category"))
