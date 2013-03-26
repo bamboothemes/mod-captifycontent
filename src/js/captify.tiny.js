@@ -178,20 +178,20 @@ jQuery.fn.extend({
 
 			//function to push the caption out of view
 			var cHide = function() {
-					if(!over_caption && !over_img) {
-						var props = o.animation == 'fade' ? {
+				if(!over_caption && !over_img) {
+					var props = o.animation == 'fade' ? {
+						opacity: 0
+					} : {
+						marginTop: captionPosition.hide
+					};
+					caption.animate(props, o.speedOut);
+					if(o.animation == 'fade') {
+						captionContent.animate({
 							opacity: 0
-						} : {
-							marginTop: captionPosition.hide
-						};
-						caption.animate(props, o.speedOut);
-						if(o.animation == 'fade') {
-							captionContent.animate({
-								opacity: 0
-							}, o.speedOver);
-						}
+						}, o.speedOver);
 					}
-				};
+				}
+			};
 
 			if(o.animation != 'always-on') {
 				//when the mouse is over the image
