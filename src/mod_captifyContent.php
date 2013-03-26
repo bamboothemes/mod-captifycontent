@@ -91,16 +91,8 @@ $displayImages = $params->get('displayImages', 'k2item');
 $titleBelow = $params->get('titleBelow', '0');
 $contentSource = $params->get('type', 'content');
 
-if (substr(JVERSION, 0, 3) >= '1.6')
-{
-	// Test to see if cache is enabled
-	$cache = $app->getCfg('caching') ? 1 : 0;
-}
-else
-{
-	// Test to see if cache is enabled
-	$cache = $app->getCfg('caching') ? 1 : 0;
-}
+// Test to see if cache is enabled
+$cache = $app->getCfg('caching') ? 1 : 0;
 
 // Load css into the head
 if ($scripts)
