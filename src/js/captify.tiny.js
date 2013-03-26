@@ -196,35 +196,37 @@ jQuery.fn.extend({
 			if(o.animation != 'always-on') {
 				//when the mouse is over the image
 				jQuery(this).hover(
-
-				function() {
-					over_img = true;
-					if(!over_caption) {
-						var props = o.animation == 'fade' ? {
-							opacity: o.opacity
-						} : {
-							marginTop: captionPosition.show
-						};
-						caption.animate(props, o.speedOver);
-						if(o.animation == 'fade') {
-							captionContent.animate({
-								opacity: 1
-							}, o.speedOver / 2);
+					function() {
+						over_img = true;
+						if(!over_caption) {
+							var props = o.animation == 'fade' ? {
+								opacity: o.opacity
+							} : {
+								marginTop: captionPosition.show
+							};
+							caption.animate(props, o.speedOver);
+							if(o.animation == 'fade') {
+								captionContent.animate({
+									opacity: 1
+								}, o.speedOver / 2);
+							}
 						}
+					},
+					function() {
+						over_img = false;
+						window.setTimeout(cHide, o.hideDelay);
 					}
-				}, function() {
-					over_img = false;
-					window.setTimeout(cHide, o.hideDelay);
-				});
+				);
 				//when the mouse is over the caption on top of the image (the caption is a sibling of the image)
 				jQuery('div', wrapper).hover(
-
-				function() {
-					over_caption = true;
-				}, function() {
-					over_caption = false;
-					window.setTimeout(cHide, o.hideDelay);
-				});
+					function() {
+						over_caption = true;
+					},
+					function() {
+						over_caption = false;
+						window.setTimeout(cHide, o.hideDelay);
+					}
+				);
 			}
 			//});
 			//if the image has already loaded (due to being cached), force the load function to be called
