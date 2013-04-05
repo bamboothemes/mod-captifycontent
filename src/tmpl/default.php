@@ -125,7 +125,6 @@ defined('_JEXEC') or die('Restricted access');
 	$imageNumber = 0;
 	$startDiv = 0;
 	$firstImage = "";
-
 	?>
 
 	<?php if ($contentSource === "category" || $contentSource === "k2category") : ?>
@@ -214,13 +213,13 @@ defined('_JEXEC') or die('Restricted access');
 			</div>
 		</div>
 
-	<?php elseif ($contentSource == "content" || $contentSource == "k2") : ?>
+	<?php elseif ($contentSource === "content" || $contentSource === "k2") : ?>
 		<div>
 			<div id="captifyContent<?php echo $module_id ?>"
 				class="captifyContent cc<?php echo $background?>">
 				<?php
 				foreach ($list as $item) :
-					if ($type == "k2" && $displayImages == "k2item")
+					if ($type === "k2" && $displayImages === "k2item")
 					{
 						$firstImage = $item->firstimage;
 					}
@@ -255,7 +254,7 @@ defined('_JEXEC') or die('Restricted access');
 						<div class="ccItem" style="margin-right:<?php echo $imgRightMargin ?>; margin-bottom:<?php echo $bottomMargin ?>px;width: <?php echo $image_width ?>px">
 							<div class="viewport">
 								<a href="<?php echo $item->link; ?>">
-									<?php if (!($transition == "slide" && $position == "bottom")) :?>
+									<?php if (!($transition === "slide" && $position === "bottom")) :?>
 										<span class="<?php echo $background ?>">
 											<?php echo $item->title;?>
 										</span>
@@ -263,7 +262,7 @@ defined('_JEXEC') or die('Restricted access');
 
 									<img src="<?php echo resizeImageHelper::getResizedImage('/'.$firstImage, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title; ?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
 
-									<?php if ($transition == "slide" && $position == "bottom") :?>
+									<?php if ($transition === "slide" && $position === "bottom") :?>
 										<span class="<?php echo $background ?> bottom">
 											<?php echo $item->title;?>
 										</span>

@@ -107,7 +107,7 @@ if ($scripts)
 	}
 }
 
-if (($contentSource == "k2") || ($contentSource == "k2category"))
+if (($contentSource === "k2") || ($contentSource === "k2category"))
 {
 	if (isK2Installed())
 	{
@@ -121,7 +121,7 @@ if (($contentSource == "k2") || ($contentSource == "k2category"))
 	}
 
 }
-elseif (($contentSource == "content") || ($contentSource == "category") || ($contentSource == "section"))
+elseif (($contentSource === "content") || ($contentSource === "category") || ($contentSource === "section"))
 {
 	$list = ModCaptifycontentHelper::getList($params);
 }
