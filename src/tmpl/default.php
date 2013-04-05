@@ -226,10 +226,7 @@ defined('_JEXEC') or die('Restricted access');
 					else
 					{
 						$html = $item->text;
-						$html .= "alt='...' title='...' />";
-
-						$pattern = '/<img[^>]+src[\\s=\'"]';
-						$pattern .= '+([^"\'>\\s]+)/is';
+						$pattern = '/<img[^>]+src="([^\'">]+)"/is';
 
 						if (preg_match($pattern, $html, $match))
 						{
