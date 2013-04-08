@@ -121,7 +121,7 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 						if ($access || in_array($catitem->access, $authorised))
 						{
 
-							$catitem->link = JRoute::_(ContentHelperRoute::getCategoryRoute($catitem->id) . '&layout=blog');
+							$catitem->link = JRoute::_(ContentHelperRoute::getCategoryRoute($catitem->id) . '&layout=blog&view=category&id=' . $catitem->id);
 						}
 						else
 						{
