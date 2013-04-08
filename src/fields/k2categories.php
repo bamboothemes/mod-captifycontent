@@ -23,7 +23,7 @@ class JFormFieldK2categories extends JFormField
 		if(isK2Installed())
 		{
 
-			$db = &JFactory::getDBO();
+			$db = JFactory::getDBO();
 			$query = 'SELECT id,name FROM #__k2_categories m WHERE published=1 AND trash = 0 ORDER BY parent, ordering';
 			$db->setQuery( $query );
 			$results = $db->loadObjectList();
