@@ -146,7 +146,7 @@ class SuperBlogger {
 		// TO DO: add GD check here
 
 		jimport('joomla.filesystem.file');
-		global $app;
+		$app = JFactory::getApplication();
 
 		$site_absolutepath = JPATH_SITE;
 		$site_httppath = JURI::base();
@@ -232,7 +232,7 @@ class SuperBlogger {
 	function getTwitterUpdates($twitterUsername,$siteTweetsLimit,$cacheTime,$pluginName)
 	{
 		jimport('joomla.filesystem.file');
-		global $app;
+		$app = JFactory::getApplication();
 
 		$site_absolutepath = JPATH_SITE;
 
@@ -309,7 +309,7 @@ class SuperBlogger {
 	// Path overrides
 	function getTemplatePath($pluginName,$file)
 	{
-		global $app;
+		$app = JFactory::getApplication();
 		$p = new JObject;
 
 		if (file_exists(JPATH_SITE . '/templates/' . $app->getTemplate() . '/html/' . $pluginName . '/' . $file))

@@ -284,7 +284,7 @@ else
 		public static function getList(&$params)
 		{
 
-			global $app;
+			$app = JFactory::getApplication();
 
 			$type = $params->get('type', 'content');
 
