@@ -16,6 +16,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+jimport('joomla.filesystem.path');
+
 $app = JFactory::getApplication();
 
 if (version_compare(JVERSION, '3.0', '<'))
@@ -691,7 +693,14 @@ class ModCCK2ContentHelper
 
 			if (version_compare(JVERSION, '1.6', '>='))
 			{
-				$query .= " AND i.access IN(" .implode(', ', $user->authorisedLevels()) .") ";
+				if (version_compare(JVERSION, '3.0', '>='))
+				{
+					$query .= " AND i.access IN(" .implode(', ', $user->getAuthorisedViewLevels()) .") ";
+				}
+				else
+				{
+					$query .= " AND i.access IN(" .implode(', ', $user->authorisedLevels()) .") ";
+				}
 			}
 			else
 			{
@@ -700,7 +709,14 @@ class ModCCK2ContentHelper
 
 			if (version_compare(JVERSION, '1.6', '>='))
 			{
-				$query .= " AND c.access IN(" .implode(', ', $user->authorisedLevels()) .") ";
+				if (version_compare(JVERSION, '3.0', '>='))
+				{
+					$query .= " AND c.access IN(" .implode(', ', $user->getAuthorisedViewLevels()) .") ";
+				}
+				else
+				{
+					$query .= " AND c.access IN(" .implode(', ', $user->authorisedLevels()) .") ";
+				}
 			}
 			else
 			{
@@ -715,14 +731,20 @@ class ModCCK2ContentHelper
 			// If content source is categories
 			if ($params->get('k2contentSource') != 'item')
 			{
+				if (!class_exists('K2Model'))
+				{
+					require_once JPath::clean(JPATH_SITE . '/administrator/components/com_k2/models/model.php');
+				}
+
 				if (!is_null($cid))
 				{
 					if (is_array($cid))
 					{
 						if ($params->get('getChildren'))
 						{
-							require_once JPATH_SITE . '/components/com_k2/models/itemlist.php';
-							$categories = K2ModelItemlist::getCategoryTree($cid);
+							K2Model::addIncludePath(JPATH_SITE.'/components/com_k2/models');
+							$itemlistModel = K2Model::getInstance('Itemlist', 'K2Model');
+							$categories = $itemlistModel->getCategoryTree($cid);
 							$sql = @implode(', ', $categories);
 							$query .= " AND i.catid IN ({$sql})";
 
@@ -738,8 +760,9 @@ class ModCCK2ContentHelper
 					{
 						if ($params->get('getChildren'))
 						{
-							require_once JPATH_SITE . '/components/com_k2/models/itemlist.php';
-							$categories = K2ModelItemlist::getCategoryTree($cid);
+							K2Model::addIncludePath(JPATH_SITE.'/components/com_k2/models');
+							$itemlistModel = K2Model::getInstance('Itemlist', 'K2Model');
+							$categories = $itemlistModel->getCategoryTree($cid);
 							$sql = @implode(', ', $categories);
 							$query .= " AND i.catid IN ({$sql})";
 						}
@@ -924,6 +947,11 @@ class ModCCK2ContentHelper
 		}
 		else if ($contentSource == "k2category")
 		{
+			if (!class_exists('K2Model'))
+			{
+				require_once JPath::clean(JPATH_SITE . '/administrator/components/com_k2/models/model.php');
+			}
+
 			$limit = $params->get('count', 5);
 			$cid = $params->get('k2catid', NULL);
 			$ordering = $params->get('orderingK2');
@@ -977,12 +1005,13 @@ class ModCCK2ContentHelper
 				{
 					if ($params->get('getChildren'))
 					{
-						require_once JPATH_SITE . '/components/com_k2/models/itemlist.php';
 						$allChildren = array();
 
 						foreach ($cid as $id)
 						{
-							$categories = K2ModelItemlist::getCategoryTree($id);
+							K2Model::addIncludePath(JPATH_SITE.'/components/com_k2/models');
+							$itemlistModel = K2Model::getInstance('Itemlist', 'K2Model');
+							$categories = $itemlistModel->getCategoryTree($cid);
 							$categories[] = $id;
 							$categories = @array_unique($categories);
 							$allChildren = @array_merge($allChildren, $categories);
@@ -1000,8 +1029,9 @@ class ModCCK2ContentHelper
 				{
 					if ($params->get('getChildren'))
 					{
-						require_once JPATH_SITE . '/components/com_k2/models/itemlist.php';
-						$categories = K2ModelItemlist::getCategoryTree($cid);
+						K2Model::addIncludePath(JPATH_SITE.'/components/com_k2/models');
+						$itemlistModel = K2Model::getInstance('Itemlist', 'K2Model');
+						$categories = $itemlistModel->getCategoryTree($cid);
 						$categories[] = $cid;
 						$categories = @array_unique($categories);
 						$sql = @implode(', ', $categories);
