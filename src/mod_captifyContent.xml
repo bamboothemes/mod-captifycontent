@@ -119,10 +119,6 @@
 			</fieldset>
 
 			<fieldset name="panelK2" group="panelK2" label="K2 Item Settings">
-				<field name="k2contentSource" type="list" default="0" label="K2 Content Source" description="Set this option to select if you want to specify the category that this module should draw it's content from.">
-					<option value="categories">Categories</option>
-					<option value="item">Items</option>
-				</field>
 				<field name="k2catid" type="k2categories" extension="com_k2" multiple="true" size="10" default="" label="Category Filtering" description="PARAMCATEGORYID">
 					<option value="">Select All Categories</option>
 				</field>

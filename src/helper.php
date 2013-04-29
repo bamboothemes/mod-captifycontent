@@ -729,7 +729,7 @@ class ModCCK2ContentHelper
 
 
 			// If content source is categories
-			if ($params->get('k2contentSource') != 'item')
+			if ($params->get('type') === 'k2category')
 			{
 				if (!class_exists('K2Model'))
 				{
@@ -776,7 +776,7 @@ class ModCCK2ContentHelper
 			}
 
 			// If content source is just items
-			if ($params->get('k2contentSource') == 'item')
+			if ($params->get('type') === 'k2')
 			{
 				if (!empty($itemid))
 				{

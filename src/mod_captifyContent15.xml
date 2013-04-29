@@ -60,10 +60,6 @@
 		</param>
 
 		<param type="panel" panel="panelK2" title="K2 Item Settings"/>
-		<param name="k2contentSource" type="radio" default="0" label="K2 Content Source" description="Set this option to select if you want to specify the category that this module should draw it's content from.">
-			<option value="categories">Categories</option>
-			<option value="item">Items</option>
-		</param>
 		<param name="k2catid" type="categoriesmultiple" default="" label="Filter items by category" description="Select one ore more categories for which you want to filter an items list. Select none to fetch items from all categories." />
 		<param name="getChildren" type="list" default="0" label="Fetch items from children categories">
 			<option value="0">No</option>
