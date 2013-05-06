@@ -42,11 +42,11 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 
 	jimport('joomla.application.component.model');
 
+
 	$com_path = JPATH_SITE . '/components/com_content';
 	require_once $com_path . '/router.php';
 	require_once $com_path . '/helpers/route.php';
 
-	jimport('joomla.application.component.model');
 
 	ZenJModel::addIncludePath($com_path . '/models', 'ContentModel');
 
@@ -66,6 +66,8 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 
 			if ($type === "category")
 			{
+				require_once JPATH_SITE . '/components/com_content/models/categories.php';
+
 				$catids = (array)$params->get('c_catid', '0');
 				$access = !JComponentHelper::getParams('com_content')->get('show_noauth');
 				$authorised = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'));
@@ -154,6 +156,9 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 			}
 			else if ($type == "content")
 			{
+				require_once JPATH_SITE . '/components/com_content/models/categories.php';
+				require_once JPATH_SITE . '/components/com_content/models/articles.php';
+
 				$catids = $params->get('catid');
 
 				$articles = ZenJModel::getInstance('Articles', 'ContentModel', array('ignore_request' => true));
