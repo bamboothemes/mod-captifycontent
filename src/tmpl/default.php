@@ -178,9 +178,9 @@ defined('_JEXEC') or die('Restricted access');
 									<?php endif;?>
 
 									<?php if ($type == "category") : ?>
-										<img src="<?php echo ZenImageResizer::getResizedImage('/'.$item->image, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title;?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
+										<img src="<?php echo ZenImageResizer::getResizedImage($item->image, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title;?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
 									<?php else : ?>
-										<img src="<?php echo ZenImageResizer::getResizedImage('/'.$item->image, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title;?>"  <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?>/>
+										<img src="<?php echo ZenImageResizer::getResizedImage($item->image, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title;?>"  <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?>/>
 									<?php endif; ?>
 
 									<?php if ($transition == "slide" && $position == "bottom") :?>
@@ -257,7 +257,7 @@ defined('_JEXEC') or die('Restricted access');
 										</span>
 									<?php endif;?>
 
-									<img src="<?php echo ZenImageResizer::getResizedImage('/'.$firstImage, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title; ?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
+									<img src="<?php echo ZenImageResizer::getResizedImage($firstImage, $image_width, $image_height, $option); ?>" class="captify captify<?php echo $module_id ?>" alt="<?php echo $item->title; ?>" <?php if ($imageDimensions) { ?>style="height:<?php echo $image_height ?>px;width:<?php echo $image_width ?>px" <?php } ?> />
 
 									<?php if ($transition === "slide" && $position === "bottom") :?>
 										<span class="<?php echo $background ?> bottom">
