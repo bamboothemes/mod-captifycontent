@@ -42,13 +42,16 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 
 	jimport('joomla.application.component.model');
 
+	if (!class_exists("ContentModelArticles")) {
+		require_once JPATH_BASE.DIRECTORY_SEPARATOR."administrator".DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_content".DIRECTORY_SEPARATOR."models".DIRECTORY_SEPARATOR."articles.php";
+	}
 
 	$com_path = JPATH_SITE . '/components/com_content';
 	require_once $com_path . '/router.php';
 	require_once $com_path . '/helpers/route.php';
 
 
-	ZenJModel::addIncludePath($com_path . '/models', 'ContentModel');
+	JModelLegacy::addIncludePath($com_path . '/models', 'ContentModel');
 
 	/**
 	 * Content Helper Class
