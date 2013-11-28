@@ -43,7 +43,7 @@ if (substr(JVERSION, 0, 3) >= '1.6')
 	jimport('joomla.application.component.model');
 
 	if (!class_exists("ContentModelArticles")) {
-		require_once JPATH_BASE.DIRECTORY_SEPARATOR."administrator".DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_content".DIRECTORY_SEPARATOR."models".DIRECTORY_SEPARATOR."articles.php";
+		require_once JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_content".DIRECTORY_SEPARATOR."models".DIRECTORY_SEPARATOR."articles.php";
 	}
 
 	$com_path = JPATH_SITE . '/components/com_content';
